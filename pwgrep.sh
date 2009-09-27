@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# pwgrep v0.2 (c) 2009 by Dipl.-Inform. (FH) Paul C. Buetow
+# pwgrep v0.3 (c) 2009 by Dipl.-Inform. (FH) Paul C. Buetow
 # pwgrep helps you to manage all your passwords using GnuGP
 # for encryption and a versioning system (subversion by default)
 # for keeping track all changes of your password database. In
@@ -10,21 +10,33 @@
 # If you are using a *BSD, you may edit the shebang line.
 #
 # Usage: 
+#
 #  Searching for a database value: 
 #	./pwgrep.sh searchstring 
+#
 #  Editing the database (same but without args): 
 #	./pwgrep.sh 
+#
 # For more reasonable commands the following symlinks are recommended: 
-#	ln -s ~/svn/pwgrep/pwgrep.sh ~/bin/pwgrep
-#	ln -s ~/svn/pwgrep/pwgrep.sh ~/bin/pwedit
+#	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwgrep
+#	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwedit
+# Replace ?.? with the version of pwgrep you want to use. Your PATH variable 
+# should also include ~/bin then.
 
 # You can overwrite the default values by setting env. variables
 # or by just editing this file.
 
 [ -z $PWGREPDB] && PWGREPDB=database.gpg
+
+# The PWGREPWORDIR should be in its own versioning repository. 
+# For password revisions.
 [ -z $PWGREPWORKDIR ] && PWGREPWORKDIR=~/svn/pwdb
 
+# Enter here your GnuPG key ID
 [ -z $GPGKEYID ] && GPGKEYID=F4B6FFF0
+
+# Customizing the versioning commands (i.e. if you want to use another
+# versioning system).
 [ -z $VERSIONCOMMIT ] && VERSIONCOMMIT="svn commit"
 [ -z $VERSIONUPDATE ] && VERSIONUPDATE="svn update"
 
@@ -37,6 +49,8 @@
 
 # Default perms. for new files is 600
 umask 177
+
+cd $PWGREPWORKDIR || (echo "No such file or directory: $PWGREPWORKDIR" && exit 1)
 
 function info {
 	echo "=====> $@"
@@ -106,7 +120,6 @@ function pwgrep () {
 }
 
 function pwedit () {
-	cd $PWGREPWORKDIR || exit 1 
 	$VERSIONUPDATE
 	cp -vp $PWGREPDB $PWGREPDB.`date +'%s'`.snap && \
 	gpg --decrypt $PWGREPDB > .database && \
