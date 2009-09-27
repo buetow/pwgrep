@@ -22,7 +22,7 @@
 # or by just editing this file.
 
 [ -z $PWGREPDB] && PWGREPDB=database.gpg
-[ -z $PWGREPWORKDIR ] && PWGREPWORKDIR=~/svn/pwgrep
+[ -z $PWGREPWORKDIR ] && PWGREPWORKDIR=~/svn/pwdb
 
 [ -z $GPGKEYID ] && GPGKEYID=F4B6FFF0
 [ -z $VERSIONCOMMIT ] && VERSIONCOMMIT="svn commit"
