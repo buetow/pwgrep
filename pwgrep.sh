@@ -1,13 +1,13 @@
-#!/bin/bash 
+#!/bin/bash -x
 
-# pwgrep v0.3 (c) 2009 by Dipl.-Inform. (FH) Paul C. Buetow
+# pwgrep v0.4-devel (c) 2009 by Dipl.-Inform. (FH) Paul C. Buetow
 # pwgrep helps you to manage all your passwords using GnuGP
 # for encryption and a versioning system (subversion by default)
 # for keeping track all changes of your password database. In
 # combination to GnuPG you should use the versioning system in
 # combination with SSL or SSH encryption.
 
-# If you are using a *BSD, you may edit the shebang line.
+# If you are using a *BSD, you may want to edit the shebang line.
 #
 # Usage: 
 #
@@ -20,6 +20,11 @@
 # For more reasonable commands the following symlinks are recommended: 
 #	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwgrep
 #	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwedit
+#	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwfls
+#	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwfcat
+#	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwfadd
+#	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwfdel
+#	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/fwipe
 # Replace ?.? with the version of pwgrep you want to use. Your PATH variable 
 # should also include ~/bin then.
 
@@ -31,6 +36,7 @@
 # The PWGREPWORDIR should be in its own versioning repository. 
 # For password revisions.
 [ -z $PWGREPWORKDIR ] && PWGREPWORKDIR=~/svn/pwdb
+[ -z $PWFILEDIREXT ] && PWFILEDIREXT=files
 
 # Enter here your GnuPG key ID
 [ -z $GPGKEYID ] && GPGKEYID=F4B6FFF0
@@ -39,6 +45,8 @@
 # versioning system).
 [ -z $VERSIONCOMMIT ] && VERSIONCOMMIT="svn commit"
 [ -z $VERSIONUPDATE ] && VERSIONUPDATE="svn update"
+[ -z $VERSIONADD ] && VERSIONADD="svn add"
+[ -z $VERSIONDEL ] && VERSIONDEL="svn delete"
 
 # Only use mawk or gawk, but if possible not nawk. On *BSD awk=nawk. So try 
 # awk/nawk last. You can use nawk but nawk will not match case insensitive.
@@ -47,10 +55,13 @@
 # Find the correct command to wipe temporaly files after usage
 [ -z $TRYWIPELIST ] && TRYWIPELIST="destroy shred"
 
-# Default perms. for new files is 600
+# From here, do not change stuff!
+
+PWFILEWORKDIR=$PWGREPWORKDIR/$PWFILEDIREXT
+CWD=`pwd`
 umask 177
 
-cd $PWGREPWORKDIR || (echo "No such file or directory: $PWGREPWORKDIR" && exit 1)
+cd $PWGREPWORKDIR || error "No such file or directory: $PWGREPWORKDIR"
 
 function info {
 	echo "=====> $@"
@@ -97,7 +108,7 @@ function setwipecmd {
 
 function pwgrep () {
 	search=$1
-	$VERSIONUPDATE
+	[ -z $NOVERSIONING ] && $VERSIONUPDATE
 	info Searching for $search
 
 	gpg --decrypt $PWGREPDB | $AWK -v search="$search" '
@@ -120,7 +131,7 @@ function pwgrep () {
 }
 
 function pwedit () {
-	$VERSIONUPDATE
+	[ -z $NOVERSIONING ] && $VERSIONUPDATE
 	cp -vp $PWGREPDB $PWGREPDB.`date +'%s'`.snap && \
 	gpg --decrypt $PWGREPDB > .database && \
 	vim --cmd 'set noswapfile' --cmd 'set nobackup' \
@@ -128,15 +139,98 @@ function pwedit () {
 	gpg --output .database.gpg -e -r $GPGKEYID .database && \
 	$WIPE .database && \
 	mv .database.gpg $PWGREPDB && \
-	[ -z $DONOTUSEVERSIONING ] && $VERSIONCOMMIT
+	[ -z $NOVERSIONING ] && $VERSIONCOMMIT
+}
+
+function pwfls () {
+	name=`echo $1 | sed 's/.gpg$//'`
+	[ -z $NOVERSIONING ] && $VERSIONUPDATE
+
+	[ ! -e $PWFILEDIREXT ] && error $PWFILEDIREXT does not exist
+
+	if [ -z $name ]; then
+		ls $PWFILEDIREXT | sed -n '/.gpg$/ { s/.gpg$//; p; }' | sort 
+		exit 0
+	fi
+
+	gpg --decrypt $PWFILEWORKDIR/${name}.gpg 
+}
+
+function pwfadd () {
+	name=`echo $1 | sed 's/.gpg$//'`
+
+	srcfile=$1
+	if [ `echo "$srcfile" | grep -v '^/'` ]; then
+		srcfile=$CWD/$srcfile	
+	fi
+
+	if [ ! -z $2 ]; then
+		outfile=`basename $2`
+	else
+		outfile=`basename $name`
+	fi
+
+	[ -z $NOVERSIONING ] && $VERSIONUPDATE
+
+	[ ! -e $PWFILEWORKDIR ] && error $PWFILEWORKDIR does not exist
+	[ -z $name ] && error Missing argument 
+
+	gpg --output $PWFILEDIREXT/${outfile}.gpg -e -r $GPGKEYID $srcfile && \
+
+	if [ -z $NOVERSIONING ]; then
+		$VERSIONADD $PWFILEDIREXT/${outfile}.gpg && $VERSIONCOMMIT
+	fi
+}
+
+function pwfdel () {
+	name=`echo $1 | sed 's/.gpg$//'`
+	[ -z $NOVERSIONING ] && $VERSIONUPDATE
+
+	[ ! -e $PWFILEWORKDIR ] && error $PWFILEWORKDIR does not exist
+	[ -z $name ] && error Missing argument 
+
+	if [ -z $NOVERSIONING ]; then
+		# Wipe even encrypted file securely
+		$WIPE $PWFILEDIREXT/${name}.gpg && \
+		touch $PWFILEDIREXT/${name}.gpg && $VERSIONCOMMIT && \
+		$VERSIONDEL $PWFILEDIREXT/${name}.gpg && $VERSIONCOMMIT
+	else
+		$WIPE $PWFILEDIREXT/${name}.gpg
+	fi
+}
+
+function fwipe () {
+	[ -z $1 ] && error Missing argument
+	$WIPE $CWD/$1
 }
 
 setawkcmd
 setwipecmd
 
-# Edit the database file if no argument is given
-if [ -z $1 ]; then
-	pwedit
-else # Otherwise just grep the database
-	pwgrep $1
-fi
+basename=`basename $0`
+case $basename in 
+	pwgrep) 
+		pwgrep $@
+	;;
+	pwedit) 
+		pwedit
+	;;
+	pwfls) 
+		pwfls $@
+	;;
+	pwfcat) 
+		pwfls $@
+	;;
+	pwfadd) 
+		pwfadd $@
+	;;
+	pwfdel) 
+		pwfdel $@
+	;;
+	fwipe) 
+		fwipe $@
+	;;
+	*)
+	error No such operation $basename
+esac
+
