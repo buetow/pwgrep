@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash 
 
 # pwgrep v0.4-devel (c) 2009 by Dipl.-Inform. (FH) Paul C. Buetow
 # pwgrep helps you to manage all your passwords using GnuGP
