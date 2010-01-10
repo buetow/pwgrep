@@ -108,7 +108,7 @@ function setwipecmd {
 
 function pwgrep () {
 	search=$1
-	[ -z $NOVERSIONING ] && $VERSIONUPDATE
+	[ -z $NOVERSIONING ] && $VERSIONUPDATE 2>&1 >/dev/null
 	info Searching for $search
 
 	gpg --decrypt $PWGREPDB | $AWK -v search="$search" '
@@ -131,7 +131,7 @@ function pwgrep () {
 }
 
 function pwedit () {
-	[ -z $NOVERSIONING ] && $VERSIONUPDATE
+	[ -z $NOVERSIONING ] && $VERSIONUPDATE 2>&1 >/dev/null
 	cp -vp $PWGREPDB $PWGREPDB.`date +'%s'`.snap && \
 	gpg --decrypt $PWGREPDB > .database && \
 	vim --cmd 'set noswapfile' --cmd 'set nobackup' \
@@ -144,7 +144,7 @@ function pwedit () {
 
 function pwfls () {
 	name=`echo $1 | sed 's/.gpg$//'`
-	[ -z $NOVERSIONING ] && $VERSIONUPDATE
+	[ -z $NOVERSIONING ] && $VERSIONUPDATE 2>&1 >/dev/null
 
 	[ ! -e $PWFILEDIREXT ] && error $PWFILEDIREXT does not exist
 
@@ -170,7 +170,8 @@ function pwfadd () {
 		outfile=`basename $name`
 	fi
 
-	[ -z $NOVERSIONING ] && $VERSIONUPDATE
+	[ -z $NOVERSIONING ] && $VERSIONUPDATE 2>&1 >/dev/null
+
 
 	[ ! -e $PWFILEWORKDIR ] && error $PWFILEWORKDIR does not exist
 	[ -z $name ] && error Missing argument 
@@ -184,7 +185,8 @@ function pwfadd () {
 
 function pwfdel () {
 	name=`echo $1 | sed 's/.gpg$//'`
-	[ -z $NOVERSIONING ] && $VERSIONUPDATE
+	[ -z $NOVERSIONING ] && $VERSIONUPDATE 2>&1 >/dev/null
+
 
 	[ ! -e $PWFILEWORKDIR ] && error $PWFILEWORKDIR does not exist
 	[ -z $name ] && error Missing argument 
