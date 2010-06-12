@@ -39,7 +39,8 @@
 [ -z $PWFILEDIREXT ] && PWFILEDIREXT=files
 
 # Enter here your GnuPG key ID
-[ -z $GPGKEYID ] && GPGKEYID=F4B6FFF0
+#[ -z $GPGKEYID ] && GPGKEYID=F4B6FFF0
+[ -z $GPGKEYID ] && GPGKEYID=37EC5C1D
 
 # Customizing the versioning commands (i.e. if you want to use another
 # versioning system).
@@ -63,8 +64,12 @@ umask 177
 
 cd $PWGREPWORKDIR || error "No such file or directory: $PWGREPWORKDIR"
 
+function out {
+	echo "$@" 
+}
+
 function info {
-	echo "=====> $@"
+	out "=====> $@"
 }
 
 function error {
