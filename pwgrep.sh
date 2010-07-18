@@ -1,6 +1,6 @@
 #!/bin/bash 
 
-# pwgrep v0.5-devel (c) 2009 by Dipl.-Inform. (FH) Paul C. Buetow
+# pwgrep v0.5 (c) 2009, 2010 by Paul C. Buetow
 # pwgrep helps you to manage all your passwords using GnuGP
 # for encryption and a versioning system (subversion by default)
 # for keeping track all changes of your password database. In
@@ -214,28 +214,39 @@ function fwipe () {
 setawkcmd
 setwipecmd
 
-basename=`basename $0`
-case $basename in 
+BASENAME=`basename $0`
+ARGS=$@
+
+case $1 in 
+   -o)
+      # Offlinemode 
+      NOVERSIONING=1
+      ARGS=${ARGS[@]:2}
+   ;;
+   *)
+esac
+
+case $BASENAME in 
 	pwgrep) 
-		pwgrep $@
+		pwgrep $ARGS
 	;;
 	pwedit) 
 		pwedit
 	;;
 	pwfls) 
-		pwfls $@
+		pwfls $ARGS
 	;;
 	pwfcat) 
-		pwfls $@
+		pwfls $ARGS
 	;;
 	pwfadd) 
-		pwfadd $@
+		pwfadd $ARGS
 	;;
 	pwfdel) 
-		pwfdel $@
+		pwfdel $ARGS
 	;;
 	fwipe) 
-		fwipe $@
+		fwipe $ARGS
 	;;
 	*)
 	error No such operation $basename

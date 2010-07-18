@@ -1,0 +1,4 @@
+Sun Jul 18 10:10:29 CEST 2010
+v0.5 - Offlinemode support (Option -o) which does not use the versioning
+   system (usable if there is no internet connection available atm).
+   e.g. "pwgrep -o foobar"
