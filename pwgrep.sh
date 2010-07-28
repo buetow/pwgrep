@@ -53,9 +53,10 @@
 # Only use mawk or gawk, but if possible not nawk. On *BSD awk=nawk. So try 
 # awk/nawk last. You can use nawk but nawk will not match case insensitive.
 [ -z $TRYAWKLIST ] && TRYAWKLIST="mawk gawk awk nawk"
-
 # Find the correct command to wipe temporaly files after usage
 [ -z $TRYWIPELIST ] && TRYWIPELIST="destroy shred"
+# Same for sed
+[ -z $TRYSEDLIST ] && TRYSEDLIST="sed gsed"
 
 # From here, do not change stuff!
 
@@ -95,6 +96,12 @@ function setawkcmd {
 	AWK=`findbin "$TRYAWKLIST"`
 	[ -z $AWK ] && error No awk found in $PATH
 	info Using $AWK
+}
+
+function setsedcmd {
+	SED=`findbin "$TRYSEDLIST"`
+	[ -z $SED ] && error No sed found in $PATH
+	info Using $SED
 }
 
 function setwipecmd {
@@ -142,9 +149,9 @@ function pwedit () {
 	gpg --decrypt $PWGREPDB > .database && \
 	vim --cmd 'set noswapfile' --cmd 'set nobackup' \
 		--cmd 'set nowritebackup' .database && \
-	gpg --output .database.gpg -e -r $GPGKEYID .database && \
+	gpg --output .$PWGREPDB -e -r $GPGKEYID .database && \
 	$WIPE .database && \
-	mv .database.gpg $PWGREPDB && \
+	mv .$PWGREPDB $PWGREPDB && \
 	[ -z $NOVERSIONING ] && $VERSIONCOMMIT
 }
 
@@ -213,19 +220,33 @@ function fwipe () {
 }
 
 setawkcmd
+setsedcmd
 setwipecmd
 
 BASENAME=`basename $0`
 ARGS=$@
 
-case $1 in 
-   -o)
-      # Offlinemode 
-      NOVERSIONING=1
-      ARGS=${ARGS[@]:2}
-   ;;
-   *)
-esac
+
+function set_opts () {
+	case $ARGS in 
+	   -o*)
+	      # Offlinemode 
+	      NOVERSIONING=1
+	      ARGS=${ARGS[@]:2}
+         set_opts
+	   ;; 
+	   -d*)
+	      # Alternate DB
+	      PWGREPDB=`echo $ARGS | $AWK '{ print $2 }'`
+	      ARGS=`echo $ARGS | $SED "s/-d $PWGREPDB//"`
+         PWGREPDB=$PWGREPDB.gpg
+         set_opts
+	   ;;
+	   *)
+	esac
+}
+
+set_opts $ARGS
 
 case $BASENAME in 
 	pwgrep) 
