@@ -31,6 +31,7 @@
 # You can overwrite the default values by setting env. variables
 # or by just editing this file.
 
+[ -z $SVN_EDITOR] && SVN_EDITOR=ex
 [ -z $PWGREPDB] && PWGREPDB=database.gpg
 
 # The PWGREPWORDIR should be in its own versioning repository. 
