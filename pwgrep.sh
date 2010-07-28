@@ -1,6 +1,6 @@
 #!/bin/bash 
 
-# pwgrep v0.5 (c) 2009, 2010 by Paul C. Buetow
+# pwgrep v0.5.1 (c) 2009, 2010 by Paul C. Buetow
 # pwgrep helps you to manage all your passwords using GnuGP
 # for encryption and a versioning system (subversion by default)
 # for keeping track all changes of your password database. In
@@ -31,8 +31,8 @@
 # You can overwrite the default values by setting env. variables
 # or by just editing this file.
 
-[ -z $SVN_EDITOR] && SVN_EDITOR=ex
-[ -z $PWGREPDB] && PWGREPDB=database.gpg
+[ -z $SVN_EDITOR ] && SVN_EDITOR=ex
+[ -z $PWGREPDB ] && PWGREPDB=database.gpg
 
 # The PWGREPWORDIR should be in its own versioning repository. 
 # For password revisions.
@@ -66,11 +66,11 @@ umask 177
 cd $PWGREPWORKDIR || error "No such file or directory: $PWGREPWORKDIR"
 
 function out {
-	echo "$@" 
+	echo "$@" 1>&2
 }
 
 function info {
-	out "=====> $@"
+	out "=====> $@" 
 }
 
 function error {
