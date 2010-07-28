@@ -1,6 +1,6 @@
 #!/bin/bash 
 
-# pwgrep v0.5.1 (c) 2009, 2010 by Paul C. Buetow
+# pwgrep v0.5-pre-1 (c) 2009, 2010 by Paul C. Buetow
 # pwgrep helps you to manage all your passwords using GnuGP
 # for encryption and a versioning system (subversion by default)
 # for keeping track all changes of your password database. In

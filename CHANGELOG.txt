@@ -1,8 +1,8 @@
 Sun Jul 18 10:10:29 CEST 2010
-v0.5 - Offlinemode support (Option -o) which does not use the versioning
+v0.5-pre-0 - Offlinemode support (Option -o) which does not use the versioning
    system (usable if there is no internet connection available atm).
    e.g. "pwgrep -o foobar"
 
 Wed Jul 28 18:16:09 CEST 2010
-v0.5.1 - pwfcat redirects all informational message to stderr. means pwfcat
+v0.5-pre-1 - pwfcat redirects all informational message to stderr. means pwfcat
    includes no informational messages of pwgrep itself anymore.
