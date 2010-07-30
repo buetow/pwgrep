@@ -33,7 +33,7 @@
 # You can overwrite the default values by setting env. variables
 # or by just editing this file.
 
-DEFAULTPWGREPDB=database
+DEFAULTPWGREPDB=mydb
 
 [ -z $SVN_EDITOR ] && SVN_EDITOR=ex
 [ -z $PWGREPDB ] && PWGREPDB=$DEFAULTPWGREPDB.gpg
