@@ -1,6 +1,7 @@
 Fri Jul 30 23:31:12 CEST 2010
 v0.5-pre-3 - new command pwdbls, which lists all databases available.
-pwldb is a synonym for pwdbls.
+pwldb is a synonym for pwdbls. Changed the default database name 
+(database.gpg => mydb.gpg) 
 
 Wed Jul 28 18:44:03 CEST 2010
 v0.5-pre-2 - new option -d DATABASE, so its multi database capable now
