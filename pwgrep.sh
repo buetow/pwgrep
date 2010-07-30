@@ -1,6 +1,6 @@
 #!/bin/bash 
 
-# pwgrep v0.5-pre-2 (c) 2009, 2010 by Paul C. Buetow
+# pwgrep v0.5-pre-3 (c) 2009, 2010 by Paul C. Buetow
 # pwgrep helps you to manage all your passwords using GnuGP
 # for encryption and a versioning system (subversion by default)
 # for keeping track all changes of your password database. In
@@ -31,8 +31,10 @@
 # You can overwrite the default values by setting env. variables
 # or by just editing this file.
 
+DEFAULTPWGREPDB=database
+
 [ -z $SVN_EDITOR ] && SVN_EDITOR=ex
-[ -z $PWGREPDB ] && PWGREPDB=database.gpg
+[ -z $PWGREPDB ] && PWGREPDB=$DEFAULTPWGREPDB.gpg
 
 # The PWGREPWORDIR should be in its own versioning repository. 
 # For password revisions.
@@ -95,13 +97,13 @@ function findbin {
 function setawkcmd {
 	AWK=`findbin "$TRYAWKLIST"`
 	[ -z $AWK ] && error No awk found in $PATH
-	info Using $AWK
+   #info Using $AWK
 }
 
 function setsedcmd {
 	SED=`findbin "$TRYSEDLIST"`
 	[ -z $SED ] && error No sed found in $PATH
-	info Using $SED
+   #info Using $SED
 }
 
 function setwipecmd {
@@ -116,7 +118,7 @@ function setwipecmd {
 		fi
 	fi
 
-	info Using $WIPE
+   info Using $WIPE for secure file deletion
 }
 
 function pwgrep () {
@@ -153,6 +155,13 @@ function pwedit () {
 	$WIPE .database && \
 	mv .$PWGREPDB $PWGREPDB && \
 	[ -z $NOVERSIONING ] && $VERSIONCOMMIT
+}
+
+function pwldb () {
+	[ -z $NOVERSIONING ] && $VERSIONUPDATE 2>&1 >/dev/null
+   echo Available Databases:
+   ls *.gpg | sed 's/\.gpg$//'
+   echo Current default: $DEFAULTPWGREPDB
 }
 
 function pwfls () {
@@ -254,6 +263,9 @@ case $BASENAME in
 	;;
 	pwedit) 
 		pwedit
+	;;
+	pwldb) 
+		pwldb
 	;;
 	pwfls) 
 		pwfls $ARGS
