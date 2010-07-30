@@ -163,7 +163,7 @@ function pwdbls () {
 	[ -z $NOVERSIONING ] && $VERSIONUPDATE 2>&1 >/dev/null
    echo Available Databases:
    ls *.gpg | sed 's/\.gpg$//'
-   echo Current default: $DEFAULTPWGREPDB
+   echo Default database: $DEFAULTPWGREPDB
 }
 
 function pwfls () {
