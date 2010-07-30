@@ -25,6 +25,8 @@
 #	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwfadd
 #	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwfdel
 #	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/fwipe
+#	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwdbls
+#	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwldb 
 # Replace ?.? with the version of pwgrep you want to use. Your PATH variable 
 # should also include ~/bin then.
 
@@ -157,7 +159,7 @@ function pwedit () {
 	[ -z $NOVERSIONING ] && $VERSIONCOMMIT
 }
 
-function pwldb () {
+function pwdbls () {
 	[ -z $NOVERSIONING ] && $VERSIONUPDATE 2>&1 >/dev/null
    echo Available Databases:
    ls *.gpg | sed 's/\.gpg$//'
@@ -264,8 +266,11 @@ case $BASENAME in
 	pwedit) 
 		pwedit
 	;;
+	pwdbls) 
+		pwdbls
+      ;;
 	pwldb) 
-		pwldb
+		pwdbls
 	;;
 	pwfls) 
 		pwfls $ARGS
