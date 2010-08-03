@@ -35,7 +35,7 @@
 
 DEFAULTPWGREPDB=mydb
 
-[ -z $SVN_EDITOR ] && SVN_EDITOR=ex
+[ -z $SVN_EDITOR ] && export SVN_EDITOR=ex
 [ -z $PWGREPDB ] && PWGREPDB=$DEFAULTPWGREPDB.gpg
 
 # The PWGREPWORDIR should be in its own versioning repository. 
