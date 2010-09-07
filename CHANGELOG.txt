@@ -11,8 +11,9 @@ v0.5-pre-2 - new option -d DATABASE, so its multi database capable now
 
 Wed Jul 28 18:16:09 CEST 2010
 v0.5-pre-1 - pwfcat redirects all informational message to stderr. means 
-pwfcat includes no informational messages of pwgrep itself anymore. Usefull
-for piping the content do another process or for redirecting it into a file.
+pwfcat includes no informational messages in stdout of pwgrep itself 
+anymore. Usefull for piping the content do another process or for 
+redirecting it into a file.
 
 Sun Jul 18 10:10:29 CEST 2010
 v0.5-pre-0 - Offlinemode support (Option -o) which does not use the 
