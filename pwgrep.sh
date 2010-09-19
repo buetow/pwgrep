@@ -168,7 +168,6 @@ function pwedit () {
 }
 
 function pwdbls () {
-   pwupdate
    echo Available Databases:
    ls *.gpg | sed 's/\.gpg$//'
    echo Default database: $DEFAULTPWGREPDB
