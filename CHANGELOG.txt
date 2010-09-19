@@ -1,23 +1,28 @@
-Tue Sep  7 20:41:04 CEST 2010
-v0.6 release branched
+Sun Sep 19 12:29:06 CEST 2010 - v0.7-pre-1 
+* New format of the CHANGELOG.txt (it's not GNU style)
+* No VERSIONUPDATE on pwgrep, pwfls, pwfcat anymore
+* Introduced new command pwupdate which will check out the newest version
+from the repository.
 
-Fri Jul 30 23:31:12 CEST 2010
-v0.5-pre-3 - new command pwdbls, which lists all databases available.
-pwldb is a synonym for pwdbls. Changed the default database name 
+Tue Sep  7 20:41:04 CEST 2010 - v0.6 release branched
+
+Fri Jul 30 23:31:12 CEST 2010 - v0.5-pre-3 
+* New command pwdbls, which lists all databases available.
+* pwldb is a synonym for pwdbls. Changed the default database name 
 (database.gpg => mydb.gpg) 
 
-Wed Jul 28 18:44:03 CEST 2010
-v0.5-pre-2 - new option -d DATABASE, so its multi database capable now
+Wed Jul 28 18:44:03 CEST 2010 - v0.5-pre-2 
+* New option -d DATABASE, so its multi database capable now
 
-Wed Jul 28 18:16:09 CEST 2010
-v0.5-pre-1 - pwfcat redirects all informational message to stderr. means 
+Wed Jul 28 18:16:09 CEST 2010 - v0.5-pre-1 
+* pwfcat redirects all informational message to stderr. means 
 pwfcat includes no informational messages in stdout of pwgrep itself 
 anymore. Usefull for piping the content do another process or for 
 redirecting it into a file.
 
-Sun Jul 18 10:10:29 CEST 2010
-v0.5-pre-0 - Offlinemode support (Option -o) which does not use the 
-versioning system (usable if there is no internet connection available 
+Sun Jul 18 10:10:29 CEST 2010 v0.5-pre-0 
+* Offlinemode support (Option -o) which does not use the versioning system 
+(usable if there is no internet connection available 
 atm).  e.g. "pwgrep -o foobar"
 
 

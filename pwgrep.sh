@@ -1,6 +1,6 @@
 #!/bin/bash 
 
-# pwgrep v0.7-pre-00 (c) 2009, 2010 by Paul C. Buetow
+# pwgrep v0.7-pre-1 (c) 2009, 2010 by Paul C. Buetow
 # pwgrep helps you to manage all your passwords using GnuGP
 # for encryption and a versioning system (subversion by default)
 # for keeping track all changes of your password database. In
@@ -20,6 +20,7 @@
 # For more reasonable commands the following symlinks are recommended: 
 #	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwgrep
 #	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwedit
+#	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwupdate
 #	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwfls
 #	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwfcat
 #	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwfadd
@@ -125,7 +126,6 @@ function setwipecmd {
 
 function pwgrep () {
 	search=$1
-	[ -z $NOVERSIONING ] && $VERSIONUPDATE 2>&1 >/dev/null
 	info Searching for $search
 
 	gpg --decrypt $PWGREPDB | $AWK -v search="$search" '
@@ -147,8 +147,14 @@ function pwgrep () {
 		}' 
 }
 
+function pwupdate () {
+   if [ -z $NOVERSIONING ]; then
+         info Updating repository
+         $VERSIONUPDATE 2>&1 >/dev/null
+   fi
+}
 function pwedit () {
-	[ -z $NOVERSIONING ] && $VERSIONUPDATE 2>&1 >/dev/null
+   pwupdate
 	cp -vp $PWGREPDB $PWGREPDB.`date +'%s'`.snap && \
 	gpg --decrypt $PWGREPDB > .database && \
 	vim --cmd 'set noswapfile' --cmd 'set nobackup' \
@@ -160,7 +166,7 @@ function pwedit () {
 }
 
 function pwdbls () {
-	[ -z $NOVERSIONING ] && $VERSIONUPDATE 2>&1 >/dev/null
+   pwupdate
    echo Available Databases:
    ls *.gpg | sed 's/\.gpg$//'
    echo Default database: $DEFAULTPWGREPDB
@@ -168,7 +174,6 @@ function pwdbls () {
 
 function pwfls () {
 	name=`echo $1 | sed 's/.gpg$//'`
-	[ -z $NOVERSIONING ] && $VERSIONUPDATE 2>&1 >/dev/null
 
 	[ ! -e $PWFILEDIREXT ] && error $PWFILEDIREXT does not exist
 
@@ -194,8 +199,7 @@ function pwfadd () {
 		outfile=`basename $name`
 	fi
 
-	[ -z $NOVERSIONING ] && $VERSIONUPDATE 2>&1 >/dev/null
-
+   pwupdate
 
 	[ ! -e $PWFILEWORKDIR ] && error $PWFILEWORKDIR does not exist
 	[ -z $name ] && error Missing argument 
@@ -209,8 +213,7 @@ function pwfadd () {
 
 function pwfdel () {
 	name=`echo $1 | sed 's/.gpg$//'`
-	[ -z $NOVERSIONING ] && $VERSIONUPDATE 2>&1 >/dev/null
-
+   pwupdate
 
 	[ ! -e $PWFILEWORKDIR ] && error $PWFILEWORKDIR does not exist
 	[ -z $name ] && error Missing argument 
@@ -261,7 +264,11 @@ set_opts $ARGS
 
 case $BASENAME in 
 	pwgrep) 
+      NOVERSIONING=1
 		pwgrep $ARGS
+	;;
+	pwupdate) 
+      pwupdate
 	;;
 	pwedit) 
 		pwedit
