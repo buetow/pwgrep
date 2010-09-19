@@ -18,16 +18,17 @@
 #	./pwgrep.sh 
 #
 # For more reasonable commands the following symlinks are recommended: 
-#	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwgrep
-#	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwedit
-#	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwupdate
-#	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwfls
-#	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwfcat
-#	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwfadd
-#	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwfdel
 #	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/fwipe
 #	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwdbls
+#	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwedit
+#	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwfadd
+#	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwfcat
+#	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwfdel
+#	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwfls
+#	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwgrep
+#	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwhelp 
 #	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwldb 
+#	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwupdate
 # Replace ?.? with the version of pwgrep you want to use. Your PATH variable 
 # should also include ~/bin then.
 
@@ -153,6 +154,7 @@ function pwupdate () {
          $VERSIONUPDATE 2>&1 >/dev/null
    fi
 }
+
 function pwedit () {
    pwupdate
 	cp -vp $PWGREPDB $PWGREPDB.`date +'%s'`.snap && \
@@ -233,13 +235,31 @@ function fwipe () {
 	$WIPE $CWD/$1
 }
 
+function pwhelp () {
+	info Possible operations are:
+cat <<END
+      fwipe <FILE>            - Wiping a file
+      pwdbls                  - Listing available DBs
+      pwedit [OPTS]           - Editing current DB
+      pwfadd                  - Adding a file to FDB
+      pwfcat <NAME>           - Printing a file from FDB to stdout
+      pwfdel <NAME>           - Deleting a file from FDB
+      pwgrep [OPTS] <REGEX>   - Grepping current DB
+      pwldb                   - Synonym for pwdbls
+      pwupdate                - Updating FDB and all DBs
+      pwhelp                  - Printing this help screen
+Where OPTS are:
+      -o                      - Offline mode
+      -d <DB NAME>            - Using a specific DB
+END
+}
+
 setawkcmd
 setsedcmd
 setwipecmd
 
 BASENAME=`basename $0`
 ARGS=$@
-
 
 function set_opts () {
 	case $ARGS in 
@@ -264,7 +284,6 @@ set_opts $ARGS
 
 case $BASENAME in 
 	pwgrep) 
-      NOVERSIONING=1
 		pwgrep $ARGS
 	;;
 	pwupdate) 
@@ -295,6 +314,6 @@ case $BASENAME in
 		fwipe $ARGS
 	;;
 	*)
-	error No such operation $basename
+      pwhelp
 esac
 
