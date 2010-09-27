@@ -1,3 +1,6 @@
+Mon Sep 27 22:43:23 CEST 2010 - v0.7-pre-2
+* Set SVN_EDITOR="ex -c 1" as default
+
 Sun Sep 19 12:29:06 CEST 2010 - v0.7-pre-1 
 * New format of the CHANGELOG.txt (it's not GNU style)
 * No VERSIONUPDATE on pwgrep, pwfls, pwfcat, pwdbls anymore
