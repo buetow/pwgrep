@@ -115,13 +115,11 @@ function findbin () {
 function setawkcmd () {
 	AWK=$(findbin "$TRYAWKLIST")
 	[ -z $AWK ] && error No awk found in $PATH
-   #info Using $AWK
 }
 
 function setsedcmd () {
 	SED=$(findbin "$TRYSEDLIST")
 	[ -z $SED ] && error No sed found in $PATH
-   #info Using $SED
 }
 
 function setwipecmd () {
@@ -136,7 +134,7 @@ function setwipecmd () {
 		fi
 	fi
 
-   info Using $WIPE for secure file deletion
+	info Using $WIPE for secure file deletion
 }
 
 function pwgrep () {
@@ -170,7 +168,7 @@ function pwupdate () {
 }
 
 function pwedit () {
-   pwupdate
+	pwupdate
 	cp -vp $PWGREPDB $PWGREPDB.$(date +'%s').snap && \
 	gpg --decrypt $PWGREPDB > .database && \
 	vim --cmd 'set noswapfile' --cmd 'set nobackup' \
@@ -182,9 +180,9 @@ function pwedit () {
 }
 
 function pwdbls () {
-   echo Available Databases:
-   ls *.gpg | sed 's/\.gpg$//'
-   echo Current database: $PWGREPDB
+	echo Available Databases:
+	ls *.gpg | sed 's/\.gpg$//'
+	echo Current database: $PWGREPDB
 }
 
 function pwfls () {
@@ -214,7 +212,7 @@ function pwfadd () {
 		outfile=$(basename $name)
 	fi
 
-   pwupdate
+	pwupdate
 
 	[ ! -e $PWFILEWORKDIR ] && error $PWFILEWORKDIR does not exist
 	[ -z $name ] && error Missing argument 
@@ -228,7 +226,7 @@ function pwfadd () {
 
 function pwfdel () {
 	name=$(echo $1 | sed 's/.gpg$//')
-   pwupdate
+	pwupdate
 
 	[ ! -e $PWFILEWORKDIR ] && error $PWFILEWORKDIR does not exist
 	[ -z $name ] && error Missing argument 
@@ -285,17 +283,17 @@ ARGS=$@
 function set_opts () {
 	case $ARGS in 
 	   -o*)
-	      # Offlinemode 
-	      NOVERSIONING=1
-	      ARGS=${ARGS[@]:2}
-         set_opts
+		# Offlinemode 
+		NOVERSIONING=1
+		ARGS=${ARGS[@]:2}
+		set_opts
 	   ;; 
 	   -d*)
-	      # Alternate DB
-	      PWGREPDB=$(echo $ARGS | $AWK '{ print $2 }')
-	      ARGS=$(echo $ARGS | $SED "s/-d $PWGREPDB//")
-         PWGREPDB=$PWGREPDB.gpg
-         set_opts
+		# Alternate DB
+		PWGREPDB=$(echo $ARGS | $AWK '{ print $2 }')
+		ARGS=$(echo $ARGS | $SED "s/-d $PWGREPDB//")
+		PWGREPDB=$PWGREPDB.gpg
+		set_opts
 	   ;;
 	   *)
 	esac
@@ -308,7 +306,7 @@ case $BASENAME in
 		pwgrep $ARGS
 	;;
 	pwupdate) 
-      pwupdate
+		pwupdate
 	;;
 	pwedit) 
 		pwedit
