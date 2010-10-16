@@ -47,15 +47,14 @@ DEFAULTPWGREPDB=mydb.gpg
 
 # From here, do not change stuff! You may edit the content of the file $PWGREPRC!
 
-function source_config {
+function source_config () {
 	if [ -f $PWGREPRC ]; then
 		$SED 's/^/export /' $PWGREPRC > $PWGREPRC.source
-		source $PWGREPRC.source
-		rm $PWGREPRC.source
+		source $PWGREPRC.source && rm $PWGREPRC.source
 	fi
 }
 
-function configure {
+function configure () {
    	# Reading the current configuration
    	source_config
 
@@ -87,20 +86,20 @@ function configure {
 }
 
 
-function out {
+function out () {
 	echo "$@" 1>&2
 }
 
-function info {
+function info () {
 	out "=====> $@" 
 }
 
-function error {
+function error () {
 	echo "ERROR: $@"
 	exit 666	
 }
 
-function findbin {
+function findbin () {
 	trylist=$1
 	found=""
 	for bin in $trylist; do
@@ -113,24 +112,24 @@ function findbin {
 	echo $found
 }
 
-function setawkcmd {
-	AWK=`findbin "$TRYAWKLIST"`
+function setawkcmd () {
+	AWK=$(findbin "$TRYAWKLIST")
 	[ -z $AWK ] && error No awk found in $PATH
    #info Using $AWK
 }
 
-function setsedcmd {
-	SED=`findbin "$TRYSEDLIST"`
+function setsedcmd () {
+	SED=$(findbin "$TRYSEDLIST")
 	[ -z $SED ] && error No sed found in $PATH
    #info Using $SED
 }
 
-function setwipecmd {
-	WIPE=`findbin "$TRYWIPELIST"`
+function setwipecmd () {
+	WIPE=$(findbin "$TRYWIPELIST")
 
 	if [ -z $WIPE ]; then
 		# FreeBSDs rm includes -P which is secure enough
-		if [ `uname` = 'FreBSD' ]; then
+		if [ $(uname) = 'FreBSD' ]; then
 			WIPE="rm -v -P"
 		else
 			error "No wipe command found in $PATH, please install shred or destroy"
@@ -172,7 +171,7 @@ function pwupdate () {
 
 function pwedit () {
    pwupdate
-	cp -vp $PWGREPDB $PWGREPDB.`date +'%s'`.snap && \
+	cp -vp $PWGREPDB $PWGREPDB.$(date +'%s').snap && \
 	gpg --decrypt $PWGREPDB > .database && \
 	vim --cmd 'set noswapfile' --cmd 'set nobackup' \
 		--cmd 'set nowritebackup' .database && \
@@ -189,7 +188,7 @@ function pwdbls () {
 }
 
 function pwfls () {
-	name=`echo $1 | sed 's/.gpg$//'`
+	name=$(echo $1 | sed 's/.gpg$//')
 
 	[ ! -e $PWFILEDIREXT ] && error $PWFILEDIREXT does not exist
 
@@ -202,17 +201,17 @@ function pwfls () {
 }
 
 function pwfadd () {
-	name=`echo $1 | sed 's/.gpg$//'`
+	name=$(echo $1 | sed 's/.gpg$//')
 
 	srcfile=$1
-	if [ `echo "$srcfile" | grep -v '^/'` ]; then
+	if [ $(echo "$srcfile" | grep -v '^/') ]; then
 		srcfile=$CWD/$srcfile	
 	fi
 
 	if [ ! -z $2 ]; then
-		outfile=`basename $2`
+		outfile=$(basename $2)
 	else
-		outfile=`basename $name`
+		outfile=$(basename $name)
 	fi
 
    pwupdate
@@ -228,7 +227,7 @@ function pwfadd () {
 }
 
 function pwfdel () {
-	name=`echo $1 | sed 's/.gpg$//'`
+	name=$(echo $1 | sed 's/.gpg$//')
    pwupdate
 
 	[ ! -e $PWFILEWORKDIR ] && error $PWFILEWORKDIR does not exist
@@ -275,12 +274,12 @@ setwipecmd
 configure
 
 PWFILEWORKDIR=$PWGREPWORKDIR/$PWFILEDIREXT
-CWD=`pwd`
+CWD=$(pwd)
 umask 177
 
 cd $PWGREPWORKDIR || error "No such file or directory: $PWGREPWORKDIR"
 
-BASENAME=`basename $0`
+BASENAME=$(basename $0)
 ARGS=$@
 
 function set_opts () {
@@ -293,8 +292,8 @@ function set_opts () {
 	   ;; 
 	   -d*)
 	      # Alternate DB
-	      PWGREPDB=`echo $ARGS | $AWK '{ print $2 }'`
-	      ARGS=`echo $ARGS | $SED "s/-d $PWGREPDB//"`
+	      PWGREPDB=$(echo $ARGS | $AWK '{ print $2 }')
+	      ARGS=$(echo $ARGS | $SED "s/-d $PWGREPDB//")
          PWGREPDB=$PWGREPDB.gpg
          set_opts
 	   ;;
