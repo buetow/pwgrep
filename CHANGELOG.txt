@@ -1,3 +1,6 @@
+Sat Oct 16 10:48:59 CEST 2010 - 0.7-pre-3
+* Added ~/.pwgreprc as default configuration file
+
 Mon Sep 27 22:43:23 CEST 2010 - v0.7-pre-2
 * Set SVN_EDITOR="ex -c 1" as default
 

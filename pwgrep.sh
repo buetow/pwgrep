@@ -1,6 +1,6 @@
 #!/bin/bash 
 
-# pwgrep v0.7-pre-2 (c) 2009, 2010 by Paul Buetow
+# pwgrep v0.7-pre-3 (c) 2009, 2010 by Paul Buetow
 # pwgrep helps you to manage all your passwords using GnuGP
 # for encryption and a versioning system (subversion by default)
 # for keeping track all changes of your password database. In
@@ -29,48 +29,63 @@
 #	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwhelp 
 #	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwldb 
 #	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwupdate
-# Replace ?.? with the version of pwgrep you want to use. Your PATH variable 
-# should also include ~/bin then.
+# Replace ?.? with the version of pwgrep you want to use. Your PATH 
+# variable should also include ~/bin then.
 
 # You can overwrite the default values by setting env. variables
 # or by just editing this file.
-
-DEFAULTPWGREPDB=mydb
-
-[ -z $SVN_EDITOR ] && export SVN_EDITOR="ex -c 1"
-[ -z $PWGREPDB ] && PWGREPDB=$DEFAULTPWGREPDB.gpg
-
-# The PWGREPWORDIR should be in its own versioning repository. 
-# For password revisions.
-[ -z $PWGREPWORKDIR ] && PWGREPWORKDIR=~/svn/pwdb
-[ -z $PWFILEDIREXT ] && PWFILEDIREXT=files
-
-# Enter here your GnuPG key ID
-#[ -z $GPGKEYID ] && GPGKEYID=F4B6FFF0
-[ -z $GPGKEYID ] && GPGKEYID=37EC5C1D
-
-# Customizing the versioning commands (i.e. if you want to use another
-# versioning system).
-[ -z $VERSIONCOMMIT ] && VERSIONCOMMIT="svn commit"
-[ -z $VERSIONUPDATE ] && VERSIONUPDATE="svn update"
-[ -z $VERSIONADD ] && VERSIONADD="svn add"
-[ -z $VERSIONDEL ] && VERSIONDEL="svn delete"
+DEFAULTPWGREPDB=mydb.gpg
+[ -z "$PWGREPRC" ] && PWGREPRC=~/.pwgreprc
 
 # Only use mawk or gawk, but if possible not nawk. On *BSD awk=nawk. So try 
 # awk/nawk last. You can use nawk but nawk will not match case insensitive.
-[ -z $TRYAWKLIST ] && TRYAWKLIST="mawk gawk awk nawk"
+[ -z "$TRYAWKLIST" ] && TRYAWKLIST="mawk gawk awk nawk"
 # Find the correct command to wipe temporaly files after usage
-[ -z $TRYWIPELIST ] && TRYWIPELIST="destroy shred"
+[ -z "$TRYWIPELIST" ] && TRYWIPELIST="destroy shred"
 # Same for sed
-[ -z $TRYSEDLIST ] && TRYSEDLIST="sed gsed"
+[ -z "$TRYSEDLIST" ] && TRYSEDLIST="sed gsed"
 
-# From here, do not change stuff!
+# From here, do not change stuff! You may edit the content of the file $PWGREPRC!
 
-PWFILEWORKDIR=$PWGREPWORKDIR/$PWFILEDIREXT
-CWD=`pwd`
-umask 177
+function source_config {
+	if [ -f $PWGREPRC ]; then
+		$SED 's/^/export /' $PWGREPRC > $PWGREPRC.source
+		source $PWGREPRC.source
+		rm $PWGREPRC.source
+	fi
+}
 
-cd $PWGREPWORKDIR || error "No such file or directory: $PWGREPWORKDIR"
+function configure {
+   	# Reading the current configuration
+   	source_config
+
+	# Setting default values if not set in the configuration file already
+	(
+	[ -z "$SVN_EDITOR" ] && echo 'SVN_EDITOR="ex -c 1"'
+	[ -z "$PWGREPDB" ] && echo PWGREPDB=$DEFAULTPWGREPDB
+
+	# The PWGREPWORDIR should be in its own versioning repository. 
+	# For password revisions.
+	[ -z "$PWGREPWORKDIR" ] && echo PWGREPWORKDIR=~/svn/pwdb
+	[ -z "$PWFILEDIREXT" ] && echo PWFILEDIREXT=files
+
+	# Enter here your GnuPG key ID
+	#[ -z "$GPGKEYID" ] && echo GPGKEYID=F4B6FFF0
+	[ -z "$GPGKEYID" ] && echo GPGKEYID=37EC5C1D
+
+	# Customizing the versioning commands (i.e. if you want to use another
+	# versioning system).
+	[ -z "$VERSIONCOMMIT" ] && echo 'VERSIONCOMMIT="svn commit"'
+	[ -z "$VERSIONUPDATE" ] && echo 'VERSIONUPDATE="svn update"'
+	[ -z "$VERSIONADD" ] && echo 'VERSIONADD="svn add"'
+	[ -z "$VERSIONDEL" ] && echo 'VERSIONDEL="svn delete"'
+	) >> $PWGREPRC
+
+	# Re-reading the current configuration, because there might be new
+	# variables by now
+   	source_config
+}
+
 
 function out {
 	echo "$@" 1>&2
@@ -170,7 +185,7 @@ function pwedit () {
 function pwdbls () {
    echo Available Databases:
    ls *.gpg | sed 's/\.gpg$//'
-   echo Default database: $DEFAULTPWGREPDB
+   echo Current database: $PWGREPDB
 }
 
 function pwfls () {
@@ -256,6 +271,14 @@ END
 setawkcmd
 setsedcmd
 setwipecmd
+
+configure
+
+PWFILEWORKDIR=$PWGREPWORKDIR/$PWFILEDIREXT
+CWD=`pwd`
+umask 177
+
+cd $PWGREPWORKDIR || error "No such file or directory: $PWGREPWORKDIR"
 
 BASENAME=`basename $0`
 ARGS=$@
