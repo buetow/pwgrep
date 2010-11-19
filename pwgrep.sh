@@ -1,6 +1,6 @@
 #!/bin/bash 
 
-# pwgrep v0.8-pre (c) 2009, 2010 by Paul Buetow
+# pwgrep v0.8-pre-2 (c) 2009, 2010 by Paul Buetow
 # pwgrep helps you to manage all your passwords using GnuGP
 # for encryption and a versioning system (subversion by default)
 # for keeping track all changes of your password database. In
@@ -17,20 +17,8 @@
 #  Editing the database (same but without args): 
 #	./pwgrep.sh 
 #
-# For more reasonable commands the following symlinks are recommended: 
-#	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/fwipe
-#	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwdbls
-#	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwedit
-#	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwfadd
-#	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwfcat
-#	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwfdel
-#	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwfls
-#	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwgrep
-#	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwhelp 
-#	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwldb 
-#	ln -s ~/svn/pwgrep/v?.?/pwgrep.sh ~/bin/pwupdate
-# Replace ?.? with the version of pwgrep you want to use. Your PATH 
-# variable should also include ~/bin then.
+# For more reasonable commands the following symlinks are recommended.
+# Take a look at the create-symlinks.sh script.	
 
 # You can overwrite the default values by setting env. variables
 # or by just editing this file.
