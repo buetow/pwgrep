@@ -1,6 +1,6 @@
 #!/bin/bash 
 
-# pwgrep v0.8-pre-1 (c) 2009, 2010 by Paul Buetow
+# pwgrep v0.8-pre-2 (c) 2009, 2010 by Paul Buetow
 # pwgrep helps you to manage all your passwords using GnuGP
 # for encryption and a versioning system (subversion by default)
 # for keeping track all changes of your password database. In
@@ -22,7 +22,7 @@
 
 # You can overwrite the default values by setting env. variables
 # or by just editing this file.
-DEFAULTPWGREPDB=mydb.gpg
+DEFAULTPWGREPDB=private.gpg
 [ -z "$PWGREPRC" ] && PWGREPRC=~/.pwgreprc
 
 # Only use mawk or gawk, but if possible not nawk. On *BSD awk=nawk. So try 

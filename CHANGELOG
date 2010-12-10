@@ -1,4 +1,7 @@
-Fri Nov 19 22:05:27 CET 2010 - -v0.8-pre-1
+Fri Dec 10 14:22:04 CET 2010 - v0.8-pre-2
+* Set default db to private.gpg
+
+Fri Nov 19 22:05:27 CET 2010 - v0.8-pre-1
 * Added create-symlinks.sh
 
 Sun Nov  7 22:37:21 CET 2010
