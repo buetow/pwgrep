@@ -149,7 +149,7 @@ function pwgrep () {
 }
 
 function pwupdate () {
-   if [ -z $NOVERSIONING ]; then
+   if [ -z "$NOVERSIONING" ]; then
          info Updating repository
          $VERSIONUPDATE 2>&1 >/dev/null
    fi
@@ -164,7 +164,7 @@ function pwedit () {
 	gpg --output .$PWGREPDB -e -r $GPGKEYID .database && \
 	$WIPE .database && \
 	mv .$PWGREPDB $PWGREPDB && \
-	[ -z $NOVERSIONING ] && $VERSIONCOMMIT
+	[ -z "$NOVERSIONING" ] && $VERSIONCOMMIT
 }
 
 function pwdbls () {
@@ -207,7 +207,7 @@ function pwfadd () {
 
 	gpg --output $PWFILEDIREXT/${outfile}.gpg -e -r $GPGKEYID $srcfile && \
 
-	if [ -z $NOVERSIONING ]; then
+	if [ -z "$NOVERSIONING" ]; then
 		$VERSIONADD $PWFILEDIREXT/${outfile}.gpg && $VERSIONCOMMIT
 	fi
 }
@@ -219,7 +219,7 @@ function pwfdel () {
 	[ ! -e $PWFILEWORKDIR ] && error $PWFILEWORKDIR does not exist
 	[ -z $name ] && error Missing argument 
 
-	if [ -z $NOVERSIONING ]; then
+	if [ -z "$NOVERSIONING" ]; then
 		# Wipe even encrypted file securely
 		$WIPE $PWFILEDIREXT/${name}.gpg && \
 		touch $PWFILEDIREXT/${name}.gpg && $VERSIONCOMMIT && \
@@ -250,6 +250,7 @@ cat <<END
 Where OPTS are:
       -o                      - Offline mode
       -d <DB NAME>            - Using a specific DB
+      -a 	              - Grepping all available DBs at once
 END
 }
 
@@ -281,6 +282,12 @@ function set_opts () {
 		PWGREPDB=$(echo $ARGS | $AWK '{ print $2 }')
 		ARGS=$(echo $ARGS | $SED "s/-d $PWGREPDB//")
 		PWGREPDB=$PWGREPDB.gpg
+		set_opts
+	   ;;
+	   -a*)
+		# All DBs at once
+		ALL=1
+		ARGS=${ARGS[@]:2}
 		set_opts
 	   ;;
 	   *)
