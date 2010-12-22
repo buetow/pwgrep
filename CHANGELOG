@@ -2,6 +2,7 @@ Mi 22. Dez 12:40:10 CET 2010 - v0.8-pre-4
 * Added option -a which searches all available databases at once.
   This feature needs gpg-agent installed. Otherwise the gpg key passphrase
   needs to be entered for each file separately .
+* Some bugfix (using -z "$VAR" instead of -z $VAR)
 
 Mi 22. Dez 11:49:33 CET 2010 - v0.8-pre-3
 * Added WISHLIST file
