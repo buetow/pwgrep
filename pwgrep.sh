@@ -1,6 +1,6 @@
 #!/bin/bash 
 
-# pwgrep v0.8-pre-3 (c) 2009, 2010 by Paul Buetow
+# pwgrep v0.8-pre-4 (c) 2009, 2010 by Paul Buetow
 # pwgrep helps you to manage all your passwords using GnuGP
 # for encryption and a versioning system (subversion by default)
 # for keeping track all changes of your password database. In
@@ -127,25 +127,33 @@ function setwipecmd () {
 
 function pwgrep () {
 	search=$1
-	info Searching for $search
 
-	gpg --decrypt $PWGREPDB | $AWK -v search="$search" '
-		BEGIN { 
-			flag=0 
-			IGNORECASE=1
-		} 
-		!/^\t/ { 
-			if (!flag && $0 ~ search) {
-				flag=1
-				print $0
-			} else if (flag && $0 ~ search) {
-				print $0
-			} else if (flag) {
-				flag=0
-			}
-		} /^\t/ && flag { 
-			print $0 
-		}' 
+	if [ -z "$ALL" ]; then
+		dbs=$PWGREPDB
+	else
+		dbs=$(_pwdbls | sed 's/$/.gpg/')
+	fi
+
+	for db in $dbs; do	
+		info Searching for $search in $db
+		gpg --use-agent --decrypt $db | $AWK -v search="$search" '
+			BEGIN { 
+				flag=0 
+				IGNORECASE=1
+			} 
+			!/^\t/ { 
+				if (!flag && $0 ~ search) {
+					flag=1
+					print $0
+				} else if (flag && $0 ~ search) {
+					print $0
+				} else if (flag) {
+					flag=0
+				}
+			} /^\t/ && flag { 
+				print $0 
+			}' 
+	done
 }
 
 function pwupdate () {
@@ -167,9 +175,13 @@ function pwedit () {
 	[ -z "$NOVERSIONING" ] && $VERSIONCOMMIT
 }
 
+function _pwdbls () {
+	ls *.gpg | sed 's/\.gpg$//'
+}
+
 function pwdbls () {
 	echo Available Databases:
-	ls *.gpg | sed 's/\.gpg$//'
+	_pwdbls
 	echo Current database: $PWGREPDB
 }
 
@@ -286,9 +298,14 @@ function set_opts () {
 	   ;;
 	   -a*)
 		# All DBs at once
-		ALL=1
-		ARGS=${ARGS[@]:2}
-		set_opts
+		which gpg-agent	
+		if [ $? == "0" ]; then 	
+			ALL=1
+			ARGS=${ARGS[@]:2}
+			set_opts
+		else
+			error You need gpg-agent installed		
+		fi
 	   ;;
 	   *)
 	esac
