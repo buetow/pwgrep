@@ -1,3 +1,17 @@
+Mo 3. Jan 07:41:13 CET 2011
+* Tagged v0.8
+* Since pwgrep consinsts of very small updates only no more branches
+  except of trunk are used from now on.
+
+Mi 22. Dez 12:40:10 CET 2010 - v0.8-pre-4
+* Added option -a which searches all available databases at once.
+  This feature needs gpg-agent installed. Otherwise the gpg key passphrase
+  needs to be entered for each file separately .
+* Some bugfix (using -z "$VAR" instead of -z $VAR)
+
+Mi 22. Dez 11:49:33 CET 2010 - v0.8-pre-3
+* Added WISHLIST file
+
 Fri Dec 10 14:22:04 CET 2010 - v0.8-pre-2
 * Set default db to private.gpg
 
