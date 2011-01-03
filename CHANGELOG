@@ -1,3 +1,6 @@
+Mo 3. Jan 08:04:13 CET 2011 - v0.8.1-pre-1
+* Initial new version made
+
 Mo 3. Jan 07:41:13 CET 2011
 * Tagged v0.8.0
 * Since pwgrep consinsts of very small updates only no more branches
@@ -34,7 +37,8 @@ Sun Sep 19 12:29:06 CEST 2010 - v0.7-pre-1
 from the repository.
 * Introduced new command pwhelp which prints out a help screen
 
-Tue Sep  7 20:41:04 CEST 2010 - v0.6 release branched
+Tue Sep  7 20:41:04 CEST 2010 
+* v0.6 release branched
 
 Fri Jul 30 23:31:12 CEST 2010 - v0.5-pre-3 
 * New command pwdbls, which lists all databases available.
