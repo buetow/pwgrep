@@ -1,5 +1,6 @@
-Fri Jan 14 18:06:57 CET 2011
+Fri Jan 14 18:06:57 CET 2011 
 * pwhelp prints now pwgrep version 
+* Using -devel postfix instead of -pre-X for dev versions
 
 Mo 3. Jan 08:04:13 CET 2011 - v0.8.1-pre-1
 * Initial new version made
