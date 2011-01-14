@@ -42,6 +42,10 @@ function source_config () {
 	fi
 }
 
+function pwgrep_version () {
+	sed -n '/# pwgrep v/ { s/# //; p; q; }' $0
+}
+
 function configure () {
    	# Reading the current configuration
    	source_config
@@ -247,6 +251,7 @@ function fwipe () {
 }
 
 function pwhelp () {
+	info $(pwgrep_version)
 	info Possible operations are:
 cat <<END
       fwipe <FILE>            - Wiping a file
