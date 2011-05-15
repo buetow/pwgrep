@@ -1,3 +1,6 @@
+So 15. Mai 15:26:56 CEST 2011
+* Added initial README file
+
 Fri Jan 14 18:06:57 CET 2011 
 * pwhelp prints now pwgrep version 
 * Using -devel postfix instead of -pre-X for dev versions
