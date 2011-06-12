@@ -94,7 +94,7 @@ function error () {
 }
 
 function findbin () {
-	trylist=$1
+	local -r trylist=$1
 	found=""
 	for bin in $trylist; do
 		if [ -z $found ]; then
@@ -132,7 +132,7 @@ function setwipecmd () {
 }
 
 function pwgrep () {
-	search=$1
+	local -r search=$1
 
 	if [ -z "$ALL" ]; then
 		dbs=$DB
@@ -234,9 +234,10 @@ function pwfcat () {
 }
 
 function pwfadd () {
-	name=$(echo $1 | sed 's/.gpg$//')
+	local -r name=$(echo $1 | sed 's/.gpg$//')
+	local srcfile=$1
+        local outfile=''
 
-	srcfile=$1
 	if [ $(echo "$srcfile" | grep -v '^/') ]; then
 		srcfile=$CWD/$srcfile	
 	fi
