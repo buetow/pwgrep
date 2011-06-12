@@ -133,6 +133,7 @@ function setwipecmd () {
 
 function pwgrep () {
 	local -r search=$1
+        local -A dbs=()
 
 	if [ -z "$ALL" ]; then
 		dbs=$DB
