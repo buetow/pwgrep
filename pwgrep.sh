@@ -261,7 +261,7 @@ function pwfadd () {
                 umask $umaskbackup
         fi
 
-	[ ! -e $PWFILEWORKDIR ] && error $PWFILEWORKDIR does not exist
+	[ ! -e $FILESTOREWORKDIR ] && error $FILESTOREWORKDIR does not exist
 	gpg --output $FULLFILESTORE/$outfile.gpg -e -r $GPGKEYID $srcfile && \
 
 	if [ -z "$NOVERSIONING" ]; then
@@ -367,7 +367,7 @@ function set_opts () {
 
 set_opts $ARGS
 FULLFILESTORE=$FILESTOREDIR/$FILESTORECATEGORY
-PWFILEWORKDIR=$WORKDIR/$FULLFILESTORE
+FILESTOREWORKDIR=$WORKDIR/$FULLFILESTORE
 
 case $BASENAME in 
 	pwgrep) 
