@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/bin/bash
 
 # pwgrep v0.8.1-devel (c) 2009, 2010, 2011 by Paul Buetow
 # pwgrep helps you to manage all your passwords using GnuGP
@@ -22,8 +22,10 @@
 
 # You can overwrite the default values by setting env. variables
 # or by just editing this file.
-DEFAULTPWGREPDB=private.gpg
-[ -z "$PWGREPRC" ] && PWGREPRC=~/.pwgreprc
+DEFAULTDB=private.gpg
+DEFAULTFILESTOREDIR=filestore
+DEFAULTFILESTORECATEGORY=default
+[ -z "$RCFILE" ] && RCFILE=~/.pwgreprc
 
 # Only use mawk or gawk, but if possible not nawk. On *BSD awk=nawk. So try 
 # awk/nawk last. You can use nawk but nawk will not match case insensitive.
@@ -33,12 +35,12 @@ DEFAULTPWGREPDB=private.gpg
 # Same for sed
 [ -z "$TRYSEDLIST" ] && TRYSEDLIST="sed gsed"
 
-# From here, do not change stuff! You may edit the content of the file $PWGREPRC!
+# From here, do not change stuff! You may edit the content of the file $RCFILE!
 
 function source_config () {
-	if [ -f $PWGREPRC ]; then
-		$SED 's/^/export /' $PWGREPRC > $PWGREPRC.source
-		source $PWGREPRC.source && rm $PWGREPRC.source
+	if [ -f $RCFILE ]; then
+		$SED 's/^/export /' $RCFILE > $RCFILE.source
+		source $RCFILE.source && rm $RCFILE.source
 	fi
 }
 
@@ -53,12 +55,13 @@ function configure () {
 	# Setting default values if not set in the configuration file already
 	(
 	[ -z "$SVN_EDITOR" ] && echo 'SVN_EDITOR="ex -c 1"'
-	[ -z "$PWGREPDB" ] && echo PWGREPDB=$DEFAULTPWGREPDB
+	[ -z "$DB" ] && echo DB=$DEFAULTDB
+	[ -z "$FILESTOREDIR" ] && echo FILESTOREDIR=$DEFAULTFILESTOREDIR
+	[ -z "$FILESTORECATEGORY" ] && echo FILESTORECATEGORY=$DEFAULTFILESTORECATEGORY
 
 	# The PWGREPWORDIR should be in its own versioning repository. 
 	# For password revisions.
-	[ -z "$PWGREPWORKDIR" ] && echo PWGREPWORKDIR=~/svn/pwdb
-	[ -z "$PWFILEDIREXT" ] && echo PWFILEDIREXT=files
+	[ -z "$WORKDIR" ] && echo WORKDIR=~/svn/pwdb
 
 	# Enter here your GnuPG key ID
 	#[ -z "$GPGKEYID" ] && echo GPGKEYID=F4B6FFF0
@@ -70,13 +73,12 @@ function configure () {
 	[ -z "$VERSIONUPDATE" ] && echo 'VERSIONUPDATE="svn update"'
 	[ -z "$VERSIONADD" ] && echo 'VERSIONADD="svn add"'
 	[ -z "$VERSIONDEL" ] && echo 'VERSIONDEL="svn delete"'
-	) >> $PWGREPRC
+	) >> $RCFILE
 
 	# Re-reading the current configuration, because there might be new
 	# variables by now
    	source_config
 }
-
 
 function out () {
 	echo "$@" 1>&2
@@ -133,7 +135,7 @@ function pwgrep () {
 	search=$1
 
 	if [ -z "$ALL" ]; then
-		dbs=$PWGREPDB
+		dbs=$DB
 	else
 		dbs=$(_pwdbls | sed 's/$/.gpg/')
 	fi
@@ -169,13 +171,13 @@ function pwupdate () {
 
 function pwedit () {
 	pwupdate
-	cp -vp $PWGREPDB $PWGREPDB.$(date +'%s').snap && \
-	gpg --decrypt $PWGREPDB > .database && \
+	cp -vp $DB $DB.$(date +'%s').snap && \
+	gpg --decrypt $DB > .database && \
 	vim --cmd 'set noswapfile' --cmd 'set nobackup' \
 		--cmd 'set nowritebackup' .database && \
-	gpg --output .$PWGREPDB -e -r $GPGKEYID .database && \
+	gpg --output .$DB -e -r $GPGKEYID .database && \
 	$WIPE .database && \
-	mv .$PWGREPDB $PWGREPDB && \
+	mv .$DB $DB && \
 	[ -z "$NOVERSIONING" ] && $VERSIONCOMMIT
 }
 
@@ -186,20 +188,49 @@ function _pwdbls () {
 function pwdbls () {
 	echo Available Databases:
 	_pwdbls
-	echo Current database: $PWGREPDB
+	echo Current database: $DB
 }
 
 function pwfls () {
-	name=$(echo $1 | sed 's/.gpg$//')
+        local arg=$1
 
-	[ ! -e $PWFILEDIREXT ] && error $PWFILEDIREXT does not exist
+        if [ "$ALL" = "1" ]; then
+                ALL=0
+                local -r dir=$WORKDIR/$FILESTOREDIR
+	        [ ! -e $dir ] && error $dir does not exist
 
-	if [ -z $name ]; then
-		ls $PWFILEDIREXT | sed -n '/.gpg$/ { s/.gpg$//; p; }' | sort 
-		exit 0
-	fi
+                info Showing all categories
+                ls $dir | while read store; do
+                        pwfls $store 
+                done
 
-	gpg --decrypt $PWFILEWORKDIR/${name}.gpg 
+        elif [ -z "$arg" ]; then
+                local -r dir=$WORKDIR/$FILESTOREDIR
+	        [ ! -e $dir ] && error "Category $arg ($dir) does not exist"
+                info Available file store categories:
+                ls $dir 
+        else
+                local -r dir=$WORKDIR/$FILESTOREDIR/$arg
+	        [ ! -e $dir ] && error "Category $arg ($dir) does not exist"
+                info "All stored files (category $arg):"
+                ls $dir | sed -n '/.gpg$/ { s/.gpg$//; p; }' | sort 
+        fi
+}
+
+function pwfcat () {
+        local arg=$1
+
+        if [ -z "$arg" ]; then
+                error "No file specified (hint: use pwfls)"
+
+        else
+                local -r dir=$WORKDIR/$FILESTOREDIR/$FILESTORECATEGORY
+                local -r file=$(echo $arg | sed 's/.gpg$//')
+
+	        [ ! -e $dir ] && error "Category $FILESTORECATEGORY ($dir) does not exist"
+	        [ ! -e $dir/$file.gpg ] && error "File $file in category $FILESTORECATEGORY does not exist"
+	        gpg --decrypt $dir/$file.gpg 
+        fi
 }
 
 function pwfadd () {
@@ -218,31 +249,48 @@ function pwfadd () {
 
 	pwupdate
 
-	[ ! -e $PWFILEWORKDIR ] && error $PWFILEWORKDIR does not exist
-	[ -z $name ] && error Missing argument 
+	[ -z "$name" ] && error Missing argument 
 
-	gpg --output $PWFILEDIREXT/${outfile}.gpg -e -r $GPGKEYID $srcfile && \
+        if [ ! -e $FULLFILESTORE ]; then
+                info Creating new category
+                [ ! -z "$NOVERSIONING" ] && error Cannot add new category with versioning disabled
+                local -r umaskbackup=$(umask)
+                umask 0022
+                mkdir $FULLFILESTORE && $VERSIONADD $FULLFILESTORE && $VERSIONCOMMIT
+                umask $umaskbackup
+        fi
+
+	[ ! -e $PWFILEWORKDIR ] && error $PWFILEWORKDIR does not exist
+	gpg --output $FULLFILESTORE/$outfile.gpg -e -r $GPGKEYID $srcfile && \
 
 	if [ -z "$NOVERSIONING" ]; then
-		$VERSIONADD $PWFILEDIREXT/${outfile}.gpg && $VERSIONCOMMIT
+                $VERSIONADD $FULLFILESTORE/$outfile.gpg && $VERSIONCOMMIT
 	fi
 }
 
 function pwfdel () {
-	name=$(echo $1 | sed 's/.gpg$//')
-	pwupdate
+        local arg=$1
 
-	[ ! -e $PWFILEWORKDIR ] && error $PWFILEWORKDIR does not exist
-	[ -z $name ] && error Missing argument 
+        if [ -z "$arg" ]; then
+                error "No file specified (hint: use pwfls)"
 
-	if [ -z "$NOVERSIONING" ]; then
-		# Wipe even encrypted file securely
-		$WIPE $PWFILEDIREXT/${name}.gpg && \
-		touch $PWFILEDIREXT/${name}.gpg && $VERSIONCOMMIT && \
-		$VERSIONDEL $PWFILEDIREXT/${name}.gpg && $VERSIONCOMMIT
-	else
-		$WIPE $PWFILEDIREXT/${name}.gpg
-	fi
+        else
+                local -r dir=$WORKDIR/$FILESTOREDIR/$FILESTORECATEGORY
+                local -r file=$(echo $arg | sed 's/.gpg$//')
+                local -r filepath=$dir/$file.gpg
+
+	        [ ! -e $dir ] && error "Category $FILESTORECATEGORY ($dir) does not exist"
+	        [ ! -e $filepath ] && error "File $file in category $FILESTORECATEGORY does not exist"
+
+                if [ -z "$NOVERSIONING" ]; then
+                	# Wipe even encrypted file securely
+                	$WIPE $filepath && \
+                	touch $filepath && $VERSIONCOMMIT && \
+                	$VERSIONDEL $filepath && $VERSIONCOMMIT
+                else
+                	$WIPE $filepath
+                fi
+        fi
 }
 
 function fwipe () {
@@ -257,9 +305,9 @@ cat <<END
       fwipe <FILE>            - Wiping a file
       pwdbls                  - Listing available DBs
       pwedit [OPTS]           - Editing current DB
-      pwfadd                  - Adding a file to FDB
-      pwfcat <NAME>           - Printing a file from FDB to stdout
-      pwfdel <NAME>           - Deleting a file from FDB
+      pwfadd <FILE>           - Adding a file to FDB
+      pwfcat <NAME>           - Printing a file from filestore to stdout
+      pwfdel <NAME>           - Deleting a file from filestore
       pwgrep [OPTS] <REGEX>   - Grepping current DB
       pwldb                   - Synonym for pwdbls
       pwupdate                - Updating FDB and all DBs
@@ -267,7 +315,7 @@ cat <<END
 Where OPTS are:
       -o                      - Offline mode
       -d <DB NAME>            - Using a specific DB
-      -a 	              - Grepping all available DBs at once
+      -a 	              - Searching all available DBs or categories at once
 END
 }
 
@@ -277,11 +325,10 @@ setwipecmd
 
 configure
 
-PWFILEWORKDIR=$PWGREPWORKDIR/$PWFILEDIREXT
 CWD=$(pwd)
 umask 177
 
-cd $PWGREPWORKDIR || error "No such file or directory: $PWGREPWORKDIR"
+cd $WORKDIR || error "No such file or directory: $WORKDIR"
 
 BASENAME=$(basename $0)
 ARGS=$@
@@ -296,9 +343,10 @@ function set_opts () {
 	   ;; 
 	   -d*)
 		# Alternate DB
-		PWGREPDB=$(echo $ARGS | $AWK '{ print $2 }')
-		ARGS=$(echo $ARGS | $SED "s/-d $PWGREPDB//")
-		PWGREPDB=$PWGREPDB.gpg
+		DB=$(echo $ARGS | $AWK '{ print $2 }')
+                FILESTORECATEGORY=$DB
+		ARGS=$(echo $ARGS | $SED "s/-d $DB//")
+		DB=$DB.gpg
 		set_opts
 	   ;;
 	   -a*)
@@ -317,6 +365,8 @@ function set_opts () {
 }
 
 set_opts $ARGS
+FULLFILESTORE=$FILESTOREDIR/$FILESTORECATEGORY
+PWFILEWORKDIR=$WORKDIR/$FULLFILESTORE
 
 case $BASENAME in 
 	pwgrep) 
@@ -330,7 +380,7 @@ case $BASENAME in
 	;;
 	pwdbls) 
 		pwdbls
-      ;;
+        ;;
 	pwldb) 
 		pwdbls
 	;;
@@ -338,7 +388,7 @@ case $BASENAME in
 		pwfls $ARGS
 	;;
 	pwfcat) 
-		pwfls $ARGS
+		pwfcat $ARGS
 	;;
 	pwfadd) 
 		pwfadd $ARGS
@@ -350,6 +400,7 @@ case $BASENAME in
 		fwipe $ARGS
 	;;
 	*)
-      pwhelp
+                pwhelp
+        ;;
 esac
 

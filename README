@@ -4,4 +4,6 @@ For a general usage tutorial see http://pwgrep.buetow.org
 
 Hints:
 
-pb@titania:~/svn/pwdb$ for i in *.gpg; do svn propset svn:mime-type application/pgp-encrypted $i;done
+pb@titania:~/svn/pwdb$ for i in *.gpg; do 
+        svn propset svn:mime-type application/pgp-encrypted $i
+done
