@@ -38,10 +38,7 @@ DEFAULTFILESTORECATEGORY=default
 # From here, do not change stuff! You may edit the content of the file $RCFILE!
 
 function source_config () {
-	if [ -f $RCFILE ]; then
-		$SED 's/^/export /' $RCFILE > $RCFILE.source
-		source $RCFILE.source && rm $RCFILE.source
-	fi
+	[ -f $RCFILE ] && source <($SED 's/^/export /' $RCFILE)
 }
 
 function pwgrep_version () {
