@@ -203,9 +203,15 @@ pwfls () {
                 done
 
         elif [ -z "$arg" ]; then
-                local -r dir=$WORKDIR/$FILESTOREDIR
-	        [ ! -e $dir ] && error "Category $arg ($dir) does not exist"
-                info Available file store categories:
+                local dir=$WORKDIR/$FILESTOREDIR
+		if [ -z "$USEFILESTORECAT" ]; then
+                	info Available file store categories:
+                	dir=$WORKDIR/$FILESTOREDIR
+		else
+                	info Available files in store $FILESTORECATEGORY
+                	dir=$WORKDIR/$FILESTOREDIR/$FILESTORECATEGORY
+		fi
+	        [ ! -e $dir ] && error "Category ($dir) does not exist"
                 ls $dir 
         else
                 local -r dir=$WORKDIR/$FILESTOREDIR/$arg
@@ -344,6 +350,7 @@ set_opts () {
 		# Alternate DB
 		DB=$(echo $ARGS | $AWK '{ print $2 }')
                 FILESTORECATEGORY=$DB
+		USEFILESTORECAT=1
 		ARGS=$(echo $ARGS | $SED "s/-d $DB//")
 		DB=$DB.gpg
 		set_opts
