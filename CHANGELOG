@@ -1,3 +1,7 @@
+Mon Oct  3 22:33:50 CEST 2011
+* Some bugfixes
+* Some minor code refactoring
+
 So 12. Jun 11:51:43 CEST 2011
 * Filestore has now categories
 * Renamed lots of variables
