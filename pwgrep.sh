@@ -37,15 +37,15 @@ DEFAULTFILESTORECATEGORY=default
 
 # From here, do not change stuff! You may edit the content of the file $RCFILE!
 
-function source_config () {
+source_config () {
 	[ -f $RCFILE ] && source <($SED 's/^/export /' $RCFILE)
 }
 
-function pwgrep_version () {
+pwgrep_version () {
 	sed -n '/# pwgrep v/ { s/# //; p; q; }' $0
 }
 
-function configure () {
+configure () {
    	# Reading the current configuration
    	source_config
 
@@ -77,20 +77,20 @@ function configure () {
    	source_config
 }
 
-function out () {
+out () {
 	echo "$@" 1>&2
 }
 
-function info () {
+info () {
 	out "=====> $@" 
 }
 
-function error () {
+error () {
 	echo "ERROR: $@"
 	exit 666	
 }
 
-function findbin () {
+findbin () {
 	local -r trylist=$1
 	found=""
 	for bin in $trylist; do
@@ -103,17 +103,17 @@ function findbin () {
 	echo $found
 }
 
-function setawkcmd () {
+setawkcmd () {
 	AWK=$(findbin "$TRYAWKLIST")
 	[ -z $AWK ] && error No awk found in $PATH
 }
 
-function setsedcmd () {
+setsedcmd () {
 	SED=$(findbin "$TRYSEDLIST")
 	[ -z $SED ] && error No sed found in $PATH
 }
 
-function setwipecmd () {
+setwipecmd () {
 	WIPE=$(findbin "$TRYWIPELIST")
 
 	if [ -z $WIPE ]; then
@@ -128,7 +128,7 @@ function setwipecmd () {
 	info Using $WIPE for secure file deletion
 }
 
-function pwgrep () {
+pwgrep () {
 	local -r search=$1
         local -a dbs=()
 
@@ -160,14 +160,14 @@ function pwgrep () {
 	done
 }
 
-function pwupdate () {
+pwupdate () {
    if [ -z "$NOVERSIONING" ]; then
          info Updating repository
          $VERSIONUPDATE 2>&1 >/dev/null
    fi
 }
 
-function pwedit () {
+pwedit () {
 	pwupdate
 	cp -vp $DB $DB.$(date +'%s').snap && \
 	gpg --decrypt $DB > .database && \
@@ -179,17 +179,17 @@ function pwedit () {
 	[ -z "$NOVERSIONING" ] && $VERSIONCOMMIT
 }
 
-function _pwdbls () {
+_pwdbls () {
 	ls *.gpg | sed 's/\.gpg$//'
 }
 
-function pwdbls () {
+pwdbls () {
 	echo Available Databases:
 	_pwdbls
 	echo Current database: $DB
 }
 
-function pwfls () {
+pwfls () {
         local arg=$1
 
         if [ "$ALL" = "1" ]; then
@@ -215,7 +215,7 @@ function pwfls () {
         fi
 }
 
-function pwfcat () {
+pwfcat () {
         local arg=$1
 
         if [ -z "$arg" ]; then
@@ -231,7 +231,7 @@ function pwfcat () {
         fi
 }
 
-function pwfadd () {
+pwfadd () {
 	local -r name=$(echo $1 | sed 's/.gpg$//')
 	local srcfile=$1
         local outfile=''
@@ -267,7 +267,7 @@ function pwfadd () {
 	fi
 }
 
-function pwfdel () {
+pwfdel () {
         local arg=$1
 
         if [ -z "$arg" ]; then
@@ -292,12 +292,12 @@ function pwfdel () {
         fi
 }
 
-function fwipe () {
+fwipe () {
 	[ -z $1 ] && error Missing argument
 	$WIPE $CWD/$1
 }
 
-function pwhelp () {
+pwhelp () {
 	info $(pwgrep_version)
 	info Possible operations are:
 cat <<END
@@ -332,7 +332,7 @@ cd $WORKDIR || error "No such file or directory: $WORKDIR"
 BASENAME=$(basename $0)
 ARGS=$@
 
-function set_opts () {
+set_opts () {
 	case $ARGS in 
 	   -o*)
 		# Offlinemode 
