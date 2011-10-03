@@ -202,22 +202,20 @@ pwfls () {
                         pwfls $store 
                 done
 
-        elif [ -z "$arg" ]; then
+	else
                 local dir=$WORKDIR/$FILESTOREDIR
-		if [ -z "$USEFILESTORECAT" ]; then
+
+		if [ -z "$USEFILESTORECATEGORY" ]; then
                 	info Available file store categories:
                 	dir=$WORKDIR/$FILESTOREDIR
+			info "(You may use '`basename $0` -d <CATEGORY>' to display containing files.)"
 		else
                 	info Available files in store $FILESTORECATEGORY
                 	dir=$WORKDIR/$FILESTOREDIR/$FILESTORECATEGORY
 		fi
+
 	        [ ! -e $dir ] && error "Category ($dir) does not exist"
                 ls $dir 
-        else
-                local -r dir=$WORKDIR/$FILESTOREDIR/$arg
-	        [ ! -e $dir ] && error "Category $arg ($dir) does not exist"
-                info "All stored files (category $arg):"
-                ls $dir | sed -n '/.gpg$/ { s/.gpg$//; p; }' | sort 
         fi
 }
 
@@ -350,7 +348,7 @@ set_opts () {
 		# Alternate DB
 		DB=$(echo $ARGS | $AWK '{ print $2 }')
                 FILESTORECATEGORY=$DB
-		USEFILESTORECAT=1
+		USEFILESTORECATEGORY=1
 		ARGS=$(echo $ARGS | $SED "s/-d $DB//")
 		DB=$DB.gpg
 		set_opts
