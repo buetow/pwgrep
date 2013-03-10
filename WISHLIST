@@ -1,4 +1,4 @@
 This file contains all features which may be added in the future.
 
+* Move password database from Subversion to Git
 * Encrypt database file names as well
-* GUI?
