@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# pwgrep v0.8.1 (c) 2009, 2010, 2011, 2013 by Paul Buetow
+# pwgrep v0.8.2 (c) 2009, 2010, 2011, 2013 by Paul Buetow
 # pwgrep helps you to manage all your passwords using GnuGP
 # for encryption and a versioning system (subversion by default)
 # for keeping track all changes of your password database. In
@@ -52,24 +52,24 @@ function configure () {
   # Setting default values if not set in the configuration file already
   (
   [ -z "$SVN_EDITOR" ] && echo 'SVN_EDITOR="ex -c 1"'
+  [ -z "$GIT_EDITOR" ] && echo 'GIT_EDITOR="ex -c 1"'
   [ -z "$DB" ] && echo DB=$DEFAULTDB
   [ -z "$FILESTOREDIR" ] && echo FILESTOREDIR=$DEFAULTFILESTOREDIR
   [ -z "$FILESTORECATEGORY" ] && echo FILESTORECATEGORY=$DEFAULTFILESTORECATEGORY
 
   # The PWGREPWORDIR should be in its own versioning repository. 
   # For password revisions.
-  [ -z "$WORKDIR" ] && echo WORKDIR=~/svn/pwdb
+  [ -z "$WORKDIR" ] && echo WORKDIR=~/git/pwdb
 
   # Enter here your GnuPG key ID
-  #[ -z "$GPGKEYID" ] && echo GPGKEYID=F4B6FFF0
   [ -z "$GPGKEYID" ] && echo GPGKEYID=37EC5C1D
 
   # Customizing the versioning commands (i.e. if you want to use another
   # versioning system).
-  [ -z "$VERSIONCOMMIT" ] && echo 'VERSIONCOMMIT="svn commit"'
-  [ -z "$VERSIONUPDATE" ] && echo 'VERSIONUPDATE="svn update"'
-  [ -z "$VERSIONADD" ] && echo 'VERSIONADD="svn add"'
-  [ -z "$VERSIONDEL" ] && echo 'VERSIONDEL="svn delete"'
+  [ -z "$VERSIONCOMMIT" ] && echo 'VERSIONCOMMIT="git commit -a"'
+  [ -z "$VERSIONUPDATE" ] && echo 'VERSIONUPDATE="git pull origin master"'
+  [ -z "$VERSIONADD" ] && echo 'VERSIONADD="git add"'
+  [ -z "$VERSIONDEL" ] && echo 'VERSIONDEL="git rm"'
   ) >> $RCFILE
 
   # Re-reading the current configuration, because there might be new
