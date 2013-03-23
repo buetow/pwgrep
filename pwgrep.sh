@@ -51,25 +51,26 @@ function configure () {
 
   # Setting default values if not set in the configuration file already
   (
-  [ -z "$SVN_EDITOR" ] && echo 'SVN_EDITOR="ex -c 1"'
-  [ -z "$GIT_EDITOR" ] && echo 'GIT_EDITOR="ex -c 1"'
+  #[ -z "$SVN_EDITOR" ] && echo 'export SVN_EDITOR="ex -c 1"'
+  [ -z "$GIT_EDITOR" ] && echo 'export GIT_EDITOR=vim'
   [ -z "$DB" ] && echo DB=$DEFAULTDB
-  [ -z "$FILESTOREDIR" ] && echo FILESTOREDIR=$DEFAULTFILESTOREDIR
-  [ -z "$FILESTORECATEGORY" ] && echo FILESTORECATEGORY=$DEFAULTFILESTORECATEGORY
+  [ -z "$FILESTOREDIR" ] && echo export FILESTOREDIR=$DEFAULTFILESTOREDIR
+  [ -z "$FILESTORECATEGORY" ] && echo export FILESTORECATEGORY=$DEFAULTFILESTORECATEGORY
 
   # The PWGREPWORDIR should be in its own versioning repository. 
   # For password revisions.
-  [ -z "$WORKDIR" ] && echo WORKDIR=~/git/pwdb
+  [ -z "$WORKDIR" ] && echo export WORKDIR=~/git/pwdb
 
   # Enter here your GnuPG key ID
-  [ -z "$GPGKEYID" ] && echo GPGKEYID=37EC5C1D
+  [ -z "$GPGKEYID" ] && echo export GPGKEYID=37EC5C1D
 
   # Customizing the versioning commands (i.e. if you want to use another
   # versioning system).
-  [ -z "$VERSIONCOMMIT" ] && echo 'VERSIONCOMMIT="git commit -a"'
-  [ -z "$VERSIONUPDATE" ] && echo 'VERSIONUPDATE="git pull origin master"'
-  [ -z "$VERSIONADD" ] && echo 'VERSIONADD="git add"'
-  [ -z "$VERSIONDEL" ] && echo 'VERSIONDEL="git rm"'
+  [ -z "$VERSIONCOMMIT" ] && echo 'export VERSIONCOMMIT="git commit -a"'
+  [ -z "$VERSIONUPDATE" ] && echo 'export VERSIONUPDATE="git pull origin master"'
+  [ -z "$VERSIONPUSH" ] && echo 'export VERSIONPUSH="git push origin master"'
+  [ -z "$VERSIONADD" ] && echo 'export VERSIONADD="git add"'
+  [ -z "$VERSIONDEL" ] && echo 'export VERSIONDEL="git rm"'
   ) >> $RCFILE
 
   # Re-reading the current configuration, because there might be new
@@ -176,7 +177,7 @@ function pwedit () {
   gpg --output .$DB -e -r $GPGKEYID .database && \
   $WIPE .database && \
   mv .$DB $DB && \
-  [ -z "$NOVERSIONING" ] && $VERSIONCOMMIT
+  [ -z "$NOVERSIONING" ] && $VERSIONCOMMIT && [ ! -z "$VERSIONPUSH" ] && $VERSIONPUSH
 }
 
 function _pwdbls () {
@@ -257,7 +258,8 @@ function pwfadd () {
       [ ! -z "$NOVERSIONING" ] && error Cannot add new category with versioning disabled
       local -r umaskbackup=$(umask)
       umask 0022
-      mkdir $FULLFILESTORE && $VERSIONADD $FULLFILESTORE && $VERSIONCOMMIT
+      mkdir $FULLFILESTORE && $VERSIONADD $FULLFILESTORE && $VERSIONCOMMIT && [ ! -z "$VERSIONPUSH" ] && $VERSIONPUSH
+
       umask $umaskbackup
     fi
 
@@ -265,7 +267,8 @@ function pwfadd () {
   gpg --output $FULLFILESTORE/$outfile.gpg -e -r $GPGKEYID $srcfile && \
 
   if [ -z "$NOVERSIONING" ]; then
-    $VERSIONADD $FULLFILESTORE/$outfile.gpg && $VERSIONCOMMIT
+    $VERSIONADD $FULLFILESTORE/$outfile.gpg && $VERSIONCOMMIT && [ ! -z "$VERSIONPUSH" ] && $VERSIONPUSH
+
   fi
 }
 
@@ -288,6 +291,7 @@ function pwfdel () {
       $WIPE $filepath && \
       touch $filepath && $VERSIONCOMMIT && \
       $VERSIONDEL $filepath && $VERSIONCOMMIT
+      [ ! -z "$VERSIONPUSH" ] && $VERSIONPUSH
     else
       $WIPE $filepath
     fi
@@ -327,7 +331,7 @@ setwipecmd
 configure
 
 CWD=$(pwd)
-umask 177
+#umask 177
 
 cd $WORKDIR || error "No such file or directory: $WORKDIR"
 

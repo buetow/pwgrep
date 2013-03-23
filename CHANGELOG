@@ -1,5 +1,7 @@
-Sat Mar 23 21:57:43 CET 2013
+Sat Mar 23 22:49:10 CET 2013
 * Change RCS from SVN to GIT as default.
+* Added some GIT tweaks.
+* Released 0.8.2
 
 Sun Mar 10 12:08:16 CET 2013
 * Fix code indention
