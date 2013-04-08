@@ -9,7 +9,7 @@ Synopsis
       pwfcat <NAME>           - Printing a file from filestore to stdout
       pwfdel <NAME>           - Deleting a file from filestore
       pwgrep [OPTS] <REGEX>   - Grepping current DB
-      pwldb                   - Synonym for pwdbls
+      pwldb                   - Synonym of pwdbls
       pwupdate                - Updating FDB and all DBs
       pwhelp                  - Printing this help screen
 

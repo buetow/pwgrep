@@ -1,6 +1,7 @@
-pwgrep (0.8.3.0) stable; urgency=low
+pwgrep (0.8.3) stable; urgency=low
 
   * Initial version of the debian Package.  
+
   * All old change logs not in debian forma so far:
 
   Sat Mar 23 22:49:10 CET 2013
