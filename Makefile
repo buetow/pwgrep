@@ -5,7 +5,6 @@ all: version documentation build
 
 # Builds the project. Since this is only a fake project, it just copies a script.
 build:
-	cp -p ./src/$(NAME) bin/$(NAME)
 	echo "echo This is version $$(cat .version)" >> bin/$(NAME)
 	
 # 'install' installes a fake-root, which will be used to build the Debian package
@@ -13,15 +12,35 @@ build:
 install:
 	test ! -d $(DESTDIR)/usr/bin && mkdir -p $(DESTDIR)/usr/bin || exit 0
 	test ! -d $(DESTDIR)/usr/share/$(NAME) && mkdir -p $(DESTDIR)/usr/share/$(NAME) || exit 0
-	cp ./bin/* $(DESTDIR)/usr/bin
-	#cp -r ./lib $(DESTDIR)/usr/share/$(NAME)/lib
+	cp ./bin/$(NAME).sh $(DESTDIR)/usr/share/$(NAME)/
+	chmod 755 ./bin/$(NAME).sh $(DESTDIR)/usr/share/$(NAME)/$(NAME).sh
+	ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/fwipe
+	ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/pwdbls
+	ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/pwedit
+	ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/pwfadd
+	ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/pwfcat
+	ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/pwfdel
+	ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/pwfls
+	ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/pwgrep
+	ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/pwhelp 
+	ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/pwldb 
+	ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/pwupdate
 
 deinstall:
-	test ! -z "$(DESTDIR)" && test -f $(DESTDIR)/usr/bin/$(NAME) && rm $(DESTDIR)/usr/bin/$(NAME) || exit 0
-	test ! -z "$(DESTDIR)/usr/share/$(NAME)" && -d $(DESTDIR)/usr/share/$(NAME) && rm -r $(DESTDIR)/usr/share/$(NAME) || exit 0
+	rm $(DESTDIR)/fwipe 2>/dev/null || exit 0
+	rm $(DESTDIR)/pwdbls 2>/dev/null || exit 0
+	rm $(DESTDIR)/pwedit 2>/dev/null || exit 0
+	rm $(DESTDIR)/pwfadd 2>/dev/null || exit 0
+	rm $(DESTDIR)/pwfcat 2>/dev/null || exit 0
+	rm $(DESTDIR)/pwfdel 2>/dev/null || exit 0
+	rm $(DESTDIR)/pwfls 2>/dev/null || exit 0
+	rm $(DESTDIR)/pwgrep 2>/dev/null || exit 0
+	rm $(DESTDIR)/pwhelp 2>/dev/null || exit 0
+	rm $(DESTDIR)/pwldb 2>/dev/null || exit 0
+	rm $(DESTDIR)/pwupdate 2>/dev/null || exit 0
+	-d $(DESTDIR)/usr/share/$(NAME) && rm -r $(DESTDIR)/usr/share/$(NAME) || exit 0
 
 clean:
-	rm bin/*
 
 # ADDITIONAL RULES:
 

@@ -1,5 +1,97 @@
-pwgrep (0.0.0.0) stable; urgency=low
+pwgrep (0.8.3.0) stable; urgency=low
 
-  * Initial version of the template
+  * Initial version of the debian Package.  
+  * All old change logs not in debian forma so far:
+
+  Sat Mar 23 22:49:10 CET 2013
+  * Change RCS from SVN to GIT as default.
+  * Added some GIT tweaks.
+  * Released 0.8.2
+
+  Sun Mar 10 12:08:16 CET 2013
+  * Fix code indention
+
+  Sun Mar 10 11:57:15 CET 2013
+  * Released 0.8.1
+
+  Sun Mar 10 11:47:47 CET 2013
+  * Moved source to git
+
+  Mon Oct  3 22:33:50 CEST 2011
+  * Some bugfixes
+  * Some minor code refactoring
+
+  So 12. Jun 11:51:43 CEST 2011
+  * Filestore has now categories
+  * Renamed lots of variables
+
+  So 15. Mai 15:26:56 CEST 2011
+  * Added initial README file
+
+  Fri Jan 14 18:06:57 CET 2011 
+  * pwhelp prints now pwgrep version 
+  * Using -devel postfix instead of -pre-X for dev versions
+
+  Mo 3. Jan 08:04:13 CET 2011 - v0.8.1-pre-1
+  * Initial new version made
+
+  Mo 3. Jan 07:41:13 CET 2011
+  * Tagged v0.8.0
+  * Since pwgrep consinsts of very small updates only no more branches
+    except of trunk are used from now on.
+
+  Mi 22. Dez 12:40:10 CET 2010 - v0.8-pre-4
+  * Added option -a which searches all available databases at once.
+    This feature needs gpg-agent installed. Otherwise the gpg key passphrase
+    needs to be entered for each file separately .
+  * Some bugfix (using -z "$VAR" instead of -z $VAR)
+
+  Mi 22. Dez 11:49:33 CET 2010 - v0.8-pre-3
+  * Added WISHLIST file
+
+  Fri Dec 10 14:22:04 CET 2010 - v0.8-pre-2
+  * Set default db to private.gpg
+
+  Fri Nov 19 22:05:27 CET 2010 - v0.8-pre-1
+  * Added create-symlinks.sh
+
+  Sun Nov  7 22:37:21 CET 2010
+  * Released 0.7.0
+
+  Sat Oct 16 10:48:59 CEST 2010 - v0.7-pre-3
+  * Added ~/.pwgreprc as default configuration file
+
+  Mon Sep 27 22:43:23 CEST 2010 - v0.7-pre-2
+  * Set SVN_EDITOR="ex -c 1" as default
+
+  Sun Sep 19 12:29:06 CEST 2010 - v0.7-pre-1 
+  * New format of the CHANGELOG.txt (it's not GNU style)
+  * No VERSIONUPDATE on pwgrep, pwfls, pwfcat, pwdbls anymore
+  * Introduced new command pwupdate which will check out the newest version
+  from the repository.
+  * Introduced new command pwhelp which prints out a help screen
+
+  Tue Sep  7 20:41:04 CEST 2010 
+  * v0.6 release branched
+
+  Fri Jul 30 23:31:12 CEST 2010 - v0.5-pre-3 
+  * New command pwdbls, which lists all databases available.
+  * pwldb is a synonym for pwdbls. Changed the default database name 
+  (database.gpg => mydb.gpg) 
+
+  Wed Jul 28 18:44:03 CEST 2010 - v0.5-pre-2 
+  * New option -d DATABASE, so its multi database capable now
+
+  Wed Jul 28 18:16:09 CEST 2010 - v0.5-pre-1 
+  * pwfcat redirects all informational message to stderr. means 
+  pwfcat includes no informational messages in stdout of pwgrep itself 
+  anymore. Usefull for piping the content do another process or for 
+  redirecting it into a file.
+
+  Sun Jul 18 10:10:29 CEST 2010 v0.5-pre-0 
+  * Offlinemode support (Option -o) which does not use the versioning system 
+  (usable if there is no internet connection available 
+  atm).  e.g. "pwgrep -o pwgrepbar"
+
 
  -- Paul Buetow <paul@buetow.org>  Fri, 04 Jan 2013 07:53:32 +0100
