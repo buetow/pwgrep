@@ -8,7 +8,7 @@ build:
 	
 # 'install' installes a fake-root, which will be used to build the Debian package
 # $DESTDIR is actually set by the Debian tools.
-install:
+install: version
 	test ! -d $(DESTDIR)/usr/bin && mkdir -p $(DESTDIR)/usr/bin || exit 0
 	test ! -d $(DESTDIR)/usr/share/$(NAME) && mkdir -p $(DESTDIR)/usr/share/$(NAME) || exit 0
 	test ! -d $(DESTDIR)/usr/share/man/man1 && mkdir -p $(DESTDIR)/usr/share/man/man1 || exit 0
@@ -38,6 +38,7 @@ clean:
 # Parses the version out of the Debian changelog
 version:
 	cut -d' ' -f2 debian/changelog | head -n 1 | sed 's/(//;s/)//' > .version
+	sed -i "s/.*PWGREP_VERSION=.*/declare -r PWGREP_VERSION=$$(cat .version)/" ./bin/$(NAME).sh
 
 # Builds the documentation into a manpage
 documentation:

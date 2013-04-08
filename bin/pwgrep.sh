@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# pwgrep v0.8.2 (c) 2009, 2010, 2011, 2013 by Paul Buetow
+# pwgrep (c) 2009, 2010, 2011, 2013 by Paul Buetow
 # pwgrep helps you to manage all your passwords using GnuGP
 # for encryption and a versioning system (subversion by default)
 # for keeping track all changes of your password database. In
@@ -22,9 +22,11 @@
 
 # You can overwrite the default values by setting env. variables
 # or by just editing this file.
-DEFAULTDB=private.gpg
-DEFAULTFILESTOREDIR=filestore
-DEFAULTFILESTORECATEGORY=default
+declare DEFAULTDB=private.gpg
+declare DEFAULTFILESTOREDIR=filestore
+declare DEFAULTFILESTORECATEGORY=default
+declare -r PWGREP_VERSION=0.8.5
+
 [ -z "$RCFILE" ] && RCFILE=~/.pwgreprc
 
 # Only use mawk or gawk, but if possible not nawk. On *BSD awk=nawk. So try 
@@ -41,9 +43,6 @@ function source_config () {
   [ -f $RCFILE ] && source <($SED 's/^/export /' $RCFILE)
 }
 
-function pwgrep_version () {
-  sed -n '/# pwgrep v/ { s/# //; p; q; }' $0
-}
 
 function configure () {
   # Reading the current configuration
@@ -304,7 +303,7 @@ function fwipe () {
 }
 
 function pwhelp () {
-  info $(pwgrep_version)
+  info $PWGREP_VERSION
   info Possible operations are:
 cat <<END
   fwipe <FILE>            - Wiping a file
