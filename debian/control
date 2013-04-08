@@ -4,12 +4,12 @@ Priority: optional
 Maintainer: Paul Buetow <paul@buetow.org>
 Build-Depends: 
 Standards-Version: 3.9.2
-Homepage: https://template.buetow.org
-Vcs-Git: git://git.buetow.org/template
-Vcs-Browser: http://web.buetow.org/git/?p=template.git;a=summary
+Homepage: https://pwgrep.buetow.org
+Vcs-Git: git://git.buetow.org/pwgrep.git
+Vcs-Browser: http://web.buetow.org/git/?p=pwgrep.git;a=summary
 
 Package: pwgrep
 Architecture: all
-Depends:
-Description: Small template package
- This is just a template package, which cann print Hello World.
+Depends: vim, git, bash, awk
+Description: Simple password manager
+ This is just a simple password manager for the console programmed in bash and some awk using Vim and GnuPG and Git.
