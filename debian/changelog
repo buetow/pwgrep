@@ -1,3 +1,13 @@
+pwgrep (0.8.4) UNRELEASED; urgency=low
+
+  * Major bugfixes in the Makefile. 
+  
+  * The manpage now gets installed.
+
+  * Every command has its manpage now.
+
+ -- Paul Buetow <paul@buetow.org>  Mon, 08 Apr 2013 20:55:45 +0200
+
 pwgrep (0.8.3) stable; urgency=low
 
   * Initial version of the debian Package.  
