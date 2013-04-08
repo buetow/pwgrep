@@ -1,3 +1,9 @@
+pwgrep (0.8.6) stable; urgency=low
+
+  * Makefile sets version in pwgrep.sh
+
+ -- Paul Buetow <paul@buetow.org>  Mon, 08 Apr 2013 21:34:45 +0200
+
 pwgrep (0.8.5) stable; urgency=low
 
   * Fixing the Makefile again. Arrghh...
