@@ -93,8 +93,8 @@ Customize
 
         find . -name \*pwgrep\*
 
-    Search all content and rename *pwgrep* into your own new package name. You
-    can find all files with
+    Search all content and rename *pwgrep* into your own new package name.
+    You can find all files with
 
         grep -R pwgrep . | grep -v .git
 
