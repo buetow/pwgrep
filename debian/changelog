@@ -1,0 +1,5 @@
+pwgrep (0.0.0.0) stable; urgency=low
+
+  * Initial version of the template
+
+ -- Paul Buetow <paul@buetow.org>  Fri, 04 Jan 2013 07:53:32 +0100

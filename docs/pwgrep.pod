@@ -1,0 +1,113 @@
+=head1 NAME
+
+pwgrep - A template project
+
+=head1 WTF?
+
+You may use this project in order to build your own Debian package for your own project. This has been tested with Debian GNU/Linux Squeeze and Debian GNU/Linux Wheezy. 
+
+Feel free to modify any aspects. This project is just an empty example pwgrep.
+
+Follow these steps:
+
+=head2 Install required packages
+
+Run the following:
+
+    sudo aptitude install lintian devscripts dpkg-dev make perl
+
+Todo: Ensure this are the correct packages. In order to test that I would have to setup a blank Debian system.
+
+=head2 Compile the project
+
+Go to the to level directory and run
+
+    make
+
+To test run
+
+    ./bin/pwgrep
+
+It should print out the version number of the project.
+
+=head2 Create a Debian package
+
+Go to the to level directory and run
+
+    make deb
+
+It will create the files like:
+
+    ../pwgrep_0.0.0.0_all.deb
+    ../pwgrep_0.0.0.0.dsc
+    ../pwgrep_0.0.0.0_amd64.changes
+    ../pwgrep_0.0.0.0.tar.gz
+
+It should create a debian package in ../. Check and install it, e.g:
+
+    lintian --pedantic ../pwgrep_0.0.0.0_all.deb 
+    sudo dpkg -i ../pwgrep_0.0.0.0_all.deb 
+
+Run 
+
+    dpkg -L pwgrep
+
+to see whats in there. You can now run
+
+    /usr/bin/pwgrep
+
+or for example
+
+    man pwgrep
+
+=head2 Read the Makefile
+
+Read the Makefile in order to understand what's going on.
+
+=head1 Customize
+
+Now, since you understood everything feel free to customize everything the way you want it. E.g.: 
+
+    Don't use POD for documentation but LaTeX
+
+    Compile a C program
+
+    Include a ./lib dir, add it to the 'install' Makefile rule
+
+    etc etc.
+
+You should also consider the following:
+
+=head2 Manual page
+
+This template is using POD for creating manual pages. Edit ./docs/pwgrep.pod and run 
+
+    make documentation
+
+in order to build ./docs/pwgrep.1. The page will be included in the resulting debian package automatically. You can review the page with
+
+    man ./docs/pwgrep.1
+
+=head2 Renaming pwgrep into your project name 
+
+Rename all files which have *pwgrep* included into your own new package name. You can find them with
+
+    find . -name \*pwgrep\*
+
+Search all content and rename *pwgrep* into your own new package name. You can find all files with
+
+    grep -R pwgrep . | grep -v .git
+
+=head2 Updating ./debian
+
+Edit the following files accordingly to your new project (e.g. with vim):
+
+    ./debian/control
+    ./debian/copyright
+    ./debian/README
+
+=head2 Update changelog
+
+Go to the to level directory and run
+
+    dch -i

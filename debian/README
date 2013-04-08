@@ -1,0 +1,7 @@
+The Debian Package pwgrep
+----------------------------
+
+This is just a humble go project. Not sure if everything meets the debian 
+policy though. Alt least the resulting debian package passes a pedantic lintian
+
+ -- Paul Buetow <paul@buetow.org>  Wed, 02 Jan 2013 15:23:53 +0200
