@@ -12,11 +12,11 @@ install:
 	test ! -d $(DESTDIR)/usr/bin && mkdir -p $(DESTDIR)/usr/bin || exit 0
 	test ! -d $(DESTDIR)/usr/share/$(NAME) && mkdir -p $(DESTDIR)/usr/share/$(NAME) || exit 0
 	test ! -d $(DESTDIR)/usr/share/man/man1 && mkdir -p $(DESTDIR)/usr/share/man/man1 || exit 0
-	chmod 755 ./bin/$(NAME).sh $(DESTDIR)/usr/share/$(NAME)/$(NAME).sh
 	cp ./docs/$(NAME).1.gz $(DESTDIR)/usr/share/man/man1/$(NAME).1.gz
 	bash -c 'for i in fwipe pwdbls pwedit pwfadd pwfcat pwfdel pwfls pwgrep \
 		pwhelp pwldb pwupdate pwgrep; do \
 			cp ./bin/$(NAME).sh $(DESTDIR)/usr/bin/$$i; \
+			chmod 0755 $(DESTDIR)/usr/bin/$$i; \
 			cp ./docs/$(NAME).1.gz $(DESTDIR)/usr/share/man/man1/$$i.1.gz; \
 		done 2>/dev/null || exit 0'
 
