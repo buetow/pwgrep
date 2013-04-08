@@ -14,17 +14,17 @@ install:
 	test ! -d $(DESTDIR)/usr/share/$(NAME) && mkdir -p $(DESTDIR)/usr/share/$(NAME) || exit 0
 	cp ./bin/$(NAME).sh $(DESTDIR)/usr/share/$(NAME)/
 	chmod 755 ./bin/$(NAME).sh $(DESTDIR)/usr/share/$(NAME)/$(NAME).sh
-	ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/fwipe
-	ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/pwdbls
-	ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/pwedit
-	ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/pwfadd
-	ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/pwfcat
-	ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/pwfdel
-	ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/pwfls
-	ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/pwgrep
-	ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/pwhelp 
-	ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/pwldb 
-	ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/pwupdate
+	ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/usr/bin/fwipe
+	ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/usr/bin/pwdbls
+	ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/usr/bin/pwedit
+	ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/usr/bin/pwfadd
+	ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/usr/bin/pwfcat
+	ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/usr/bin/pwfdel
+	ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/usr/bin/pwfls
+	ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/usr/bin/pwgrep
+	ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/usr/bin/pwhelp 
+	ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/usr/bin/pwldb 
+	ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/usr/bin/pwupdate
 
 deinstall:
 	rm $(DESTDIR)/fwipe 2>/dev/null || exit 0
