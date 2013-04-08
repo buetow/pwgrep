@@ -17,5 +17,5 @@ Synopsis
     - Searching all available DBs or categories at once
 
 Tutorial
-    Please go to <http://pwgrep.buetow.org> .
+    Please go to <http://pwgrep.buetow.org>.
 

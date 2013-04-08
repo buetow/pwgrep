@@ -12,35 +12,22 @@ install:
 	test ! -d $(DESTDIR)/usr/bin && mkdir -p $(DESTDIR)/usr/bin || exit 0
 	test ! -d $(DESTDIR)/usr/share/$(NAME) && mkdir -p $(DESTDIR)/usr/share/$(NAME) || exit 0
 	test ! -d $(DESTDIR)/usr/share/man/man1 && mkdir -p $(DESTDIR)/usr/share/man/man1 || exit 0
-	cp ./docs/$(NAME).1.gz $(DESTDIR)/usr/share/man/man1/$(NAME).1.gz
 	cp ./bin/$(NAME).sh $(DESTDIR)/usr/share/$(NAME)/
 	chmod 755 ./bin/$(NAME).sh $(DESTDIR)/usr/share/$(NAME)/$(NAME).sh
-
-	ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/usr/bin/fwipe
-	ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/usr/bin/pwdbls
-	ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/usr/bin/pwedit
-	ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/usr/bin/pwfadd
-	ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/usr/bin/pwfcat
-	ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/usr/bin/pwfdel
-	ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/usr/bin/pwfls
-	ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/usr/bin/pwgrep
-	ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/usr/bin/pwhelp 
-	ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/usr/bin/pwldb 
-	ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/usr/bin/pwupdate
+	cp ./docs/$(NAME).1.gz $(DESTDIR)/usr/share/man/man1/$(NAME).1.gz
+	bash -c 'for i in fwipe pwdbls pwedit pwfadd pwfcat pwfdel pwfls pwgrep \
+		pwhelp pwldb pwupdate; do \
+			ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/usr/bin/$$i; \
+			cp ./docs/$(NAME).1.gz $(DESTDIR)/usr/share/man/man1/$$i.1.gz; \
+		done 2>/dev/null || exit 0'
 
 deinstall:
-	rm $(DESTDIR)/fwipe 2>/dev/null || exit 0
-	rm $(DESTDIR)/pwdbls 2>/dev/null || exit 0
-	rm $(DESTDIR)/pwedit 2>/dev/null || exit 0
-	rm $(DESTDIR)/pwfadd 2>/dev/null || exit 0
-	rm $(DESTDIR)/pwfcat 2>/dev/null || exit 0
-	rm $(DESTDIR)/pwfdel 2>/dev/null || exit 0
-	rm $(DESTDIR)/pwfls 2>/dev/null || exit 0
-	rm $(DESTDIR)/pwgrep 2>/dev/null || exit 0
-	rm $(DESTDIR)/pwhelp 2>/dev/null || exit 0
-	rm $(DESTDIR)/pwldb 2>/dev/null || exit 0
-	rm $(DESTDIR)/pwupdate 2>/dev/null || exit 0
-	-d $(DESTDIR)/usr/share/$(NAME) && rm -r $(DESTDIR)/usr/share/$(NAME) || exit 0
+	bash -c 'for i in fwipe pwdbls pwedit pwfadd pwfcat pwfdel pwfls pwgrep \
+		pwhelp pwldb pwupdate; do \
+			rm $(DESTDIR)/usr/bin/$$i; \
+			rm $(DESTDIR)/usr/share/man/man1/$$i.1.gz; \
+		done 2>/dev/null || exit 0'
+	test -d $(DESTDIR)/usr/share/$(NAME) && rm -r $(DESTDIR)/usr/share/$(NAME) || exit 0
 	test -f $(DESTDIR)/usr/share/man/man1/$(NAME).1.gz && rm -f $(DESTDIR)/usr/share/man/man1/$(NAME).1.gz || exit 0
 
 uninstall: deinstall
@@ -57,6 +44,7 @@ version:
 documentation:
 	pod2man --release="$(NAME) $$(cat .version)" \
 		--center="User Commands" ./docs/$(NAME).pod > ./docs/$(NAME).1
+	[ -f ./docs/$(NAME).1.gz ] && rm -f ./docs/$(NAME).1.gz
 	gzip ./docs/$(NAME).1
 	pod2text ./docs/$(NAME).pod > ./docs/$(NAME).txt
 

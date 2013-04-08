@@ -10,6 +10,7 @@ Vcs-Browser: http://web.buetow.org/git/?p=pwgrep.git;a=summary
 
 Package: pwgrep
 Architecture: all
-Depends: vim, git, bash, awk
+Depends: vim, git, gawk
 Description: Simple password manager
- This is just a simple password manager for the console programmed in bash and some awk using Vim and GnuPG and Git.
+ This is just a simple password manager for the console programmed in bash 
+ and some awk using Vim and GnuPG and Git.
