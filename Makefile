@@ -11,8 +11,11 @@ build:
 install:
 	test ! -d $(DESTDIR)/usr/bin && mkdir -p $(DESTDIR)/usr/bin || exit 0
 	test ! -d $(DESTDIR)/usr/share/$(NAME) && mkdir -p $(DESTDIR)/usr/share/$(NAME) || exit 0
+	test ! -d $(DESTDIR)/usr/share/man/man1 && mkdir -p $(DESTDIR)/usr/share/man/man1 || exit 0
+	cp ./docs/$(NAME).1.gz $(DESTDIR)/usr/share/man/man1/$(NAME).1.gz
 	cp ./bin/$(NAME).sh $(DESTDIR)/usr/share/$(NAME)/
 	chmod 755 ./bin/$(NAME).sh $(DESTDIR)/usr/share/$(NAME)/$(NAME).sh
+
 	ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/usr/bin/fwipe
 	ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/usr/bin/pwdbls
 	ln -s $(DESTDIR)/share/$(NAME)/$(NAME).sh $(DESTDIR)/usr/bin/pwedit
@@ -38,6 +41,9 @@ deinstall:
 	rm $(DESTDIR)/pwldb 2>/dev/null || exit 0
 	rm $(DESTDIR)/pwupdate 2>/dev/null || exit 0
 	-d $(DESTDIR)/usr/share/$(NAME) && rm -r $(DESTDIR)/usr/share/$(NAME) || exit 0
+	test -f $(DESTDIR)/usr/share/man/man1/$(NAME).1.gz && rm -f $(DESTDIR)/usr/share/man/man1/$(NAME).1.gz || exit 0
+
+uninstall: deinstall
 
 clean:
 
@@ -51,6 +57,7 @@ version:
 documentation:
 	pod2man --release="$(NAME) $$(cat .version)" \
 		--center="User Commands" ./docs/$(NAME).pod > ./docs/$(NAME).1
+	gzip ./docs/$(NAME).1
 	pod2text ./docs/$(NAME).pod > ./docs/$(NAME).txt
 
 # Build a debian package (don't sign it, modify the arguments if you want to sign it)
