@@ -25,7 +25,7 @@
 declare DEFAULTDB=private.gpg
 declare DEFAULTFILESTOREDIR=filestore
 declare DEFAULTFILESTORECATEGORY=default
-declare -r PWGREP_VERSION=0.8.6
+declare -r PWGREP_VERSION=0.8.7
 
 [ -z "$RCFILE" ] && RCFILE=~/.pwgreprc
 
