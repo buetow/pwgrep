@@ -1,3 +1,9 @@
+pwgrep (0.8.8) stable; urgency=low
+
+  * Another initial package for Debian Wheezy (2nd try)
+
+ -- Paul Buetow <paul@buetow.org>  Mon, 01 Jul 2013 12:00:10 +0200
+
 pwgrep (0.8.7) stable; urgency=low
 
   * Initial package for Debian Wheezy, but no more changes.
