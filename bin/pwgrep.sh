@@ -25,7 +25,8 @@
 declare DEFAULTDB=private.gpg
 declare DEFAULTFILESTOREDIR=filestore
 declare DEFAULTFILESTORECATEGORY=default
-declare -r PWGREP_VERSION=0.8.8
+declare DEFAULTSNAPSHOTDIR=~/.pwgrep.snapshots
+declare -r PWGREP_VERSION=0.9.0
 
 [ -z "$RCFILE" ] && RCFILE=~/.pwgreprc
 
@@ -59,6 +60,9 @@ function configure () {
   # The PWGREPWORDIR should be in its own versioning repository. 
   # For password revisions.
   [ -z "$WORKDIR" ] && echo export WORKDIR=~/git/pwdb
+
+  # The dir there to store offline snapshots, which are something like backups 
+  [ -z "$SNAPSHOTDIR" ] && echo export SNAPSHOTDIR=$DEFAULTSNAPSHOTDIR
 
   # Enter here your GnuPG key ID
   [ -z "$GPGKEYID" ] && echo export GPGKEYID=37EC5C1D
@@ -169,7 +173,8 @@ function pwupdate () {
 
 function pwedit () {
   pwupdate
-  cp -vp $DB $DB.$(date +'%s').snap && \
+  test ! -d $SNAPSHOTDIR && mkdir -p $SNAPSHOTDIR && chmod 0700 $SNAPSHOTDIR
+  cp -vp $DB $SNAPSHOTDIR/$DB.$(date +'%s').snap && \
   gpg --decrypt $DB > .database && \
   vim --cmd 'set noswapfile' --cmd 'set nobackup' \
     --cmd 'set nowritebackup' .database && \
