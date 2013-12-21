@@ -1,3 +1,16 @@
+pwgrep (0.9.0) stable; urgency=low
+
+  * Add SNAPSHOTDIR config option which can be used to use a custom directory
+  for database snapshots.
+
+  E.g.: every time a database is going to be manipulated the previous version
+  is stored to ~/.pwgrep.snapshots/....
+
+  Helps to find old passwords for the case of any RCS merge conflicts in the
+  central repository.
+
+ -- Paul Buetow <paul@buetow.org>  Sat, 21 Dec 2013 12:00:24 +0100
+
 pwgrep (0.8.8) stable; urgency=low
 
   * Another initial package for Debian Wheezy (2nd try)
