@@ -1,5 +1,3 @@
 This file contains all features which may be added in the future.
 
-* Debian Package
-* Move password database from Subversion to Git
 * Encrypt database file names as well
