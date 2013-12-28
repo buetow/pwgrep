@@ -1,3 +1,10 @@
+pwgrep (0.9.1) stable; urgency=low
+
+  * This release includes a few minor typos and a new brainstorming for future
+    features.
+
+ -- Paul Buetow <paul@buetow.org>  Sat, 28 Dec 2013 19:03:20 +0100
+
 pwgrep (0.9.0) stable; urgency=low
 
   * Add SNAPSHOTDIR config option which can be used to use a custom directory
