@@ -2,7 +2,7 @@
 
 # pwgrep (c) 2009, 2010, 2011, 2013 by Paul Buetow
 # pwgrep helps you to manage all your passwords using GnuGP
-# for encryption and a versioning system (subversion by default)
+# for encryption and a versioning system (Gi by default)
 # for keeping track all changes of your password database. In
 # combination to GnuPG you should use the versioning system in
 # combination with SSL or SSH encryption.
