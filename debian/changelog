@@ -1,3 +1,9 @@
+pwgrep (0.9.2) stable; urgency=low
+
+  * Add Debian Jessie package
+
+ -- Paul Buetow <paul@buetow.org>  Sat, 14 Jun 2014 11:07:51 +0200
+
 pwgrep (0.9.1) stable; urgency=low
 
   * This release includes a few minor typos and a new brainstorming for future
