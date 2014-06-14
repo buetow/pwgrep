@@ -26,7 +26,7 @@ declare DEFAULTDB=private.gpg
 declare DEFAULTFILESTOREDIR=filestore
 declare DEFAULTFILESTORECATEGORY=default
 declare DEFAULTSNAPSHOTDIR=~/.pwgrep.snapshots
-declare -r PWGREP_VERSION=0.9.2
+declare -r PWGREP_VERSION=0.9.3
 
 [ -z "$RCFILE" ] && RCFILE=~/.pwgreprc
 
