@@ -5,8 +5,8 @@ Maintainer: Paul Buetow <paul@buetow.org>
 Build-Depends: 
 Standards-Version: 3.9.2
 Homepage: https://pwgrep.buetow.org
-Vcs-Git: git://git.buetow.org/pwgrep.git
-Vcs-Browser: http://web.buetow.org/git/?p=pwgrep.git;a=summary
+Vcs-Git: https://github.com/rantanplan//pwgrep.git
+Vcs-Browser: https://github.com/rantanplan/pwgrep
 
 Package: pwgrep
 Architecture: all
