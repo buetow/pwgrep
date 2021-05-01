@@ -1,13 +1,13 @@
 Format: http://dep.debian.net/deps/dep5
 Upstream-Name: pwgrep
-Source: http://pwgrep.buetow.org
+Source: http://buetow.org
 
 Files: *
-Copyright: 2012 Paul Buetow <paul@buetow.org>
+Copyright: 2012 Paul Buetow <pwgrep@dev.buetow.org>
 License: GPL-3.0+
 
 Files: debian/*
-Copyright: 2012 Paul Buetow <paul@buetow.org>
+Copyright: 2012 Paul Buetow <pwgrep@dev.buetow.org>
 License: GPL-3.0+
 
 License: GPL-3.0+

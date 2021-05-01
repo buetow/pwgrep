@@ -2,20 +2,20 @@ pwgrep (0.9.3) stable; urgency=low
 
   * Merge
 
- -- Paul Buetow <paul@buetow.org>  Sat, 14 Jun 2014 11:08:45 +0200
+ -- Paul Buetow <pwgrep@dev.buetow.org>  Sat, 14 Jun 2014 11:08:45 +0200
 
 pwgrep (0.9.2) stable; urgency=low
 
   * Add Debian Jessie package
 
- -- Paul Buetow <paul@buetow.org>  Sat, 14 Jun 2014 11:07:51 +0200
+ -- Paul Buetow <pwgrep@dev.buetow.org>  Sat, 14 Jun 2014 11:07:51 +0200
 
 pwgrep (0.9.1) stable; urgency=low
 
   * This release includes a few minor typos and a new brainstorming for future
     features.
 
- -- Paul Buetow <paul@buetow.org>  Sat, 28 Dec 2013 19:03:20 +0100
+ -- Paul Buetow <pwgrep@dev.buetow.org>  Sat, 28 Dec 2013 19:03:20 +0100
 
 pwgrep (0.9.0) stable; urgency=low
 
@@ -28,31 +28,31 @@ pwgrep (0.9.0) stable; urgency=low
   Helps to find old passwords for the case of any RCS merge conflicts in the
   central repository.
 
- -- Paul Buetow <paul@buetow.org>  Sat, 21 Dec 2013 12:00:24 +0100
+ -- Paul Buetow <pwgrep@dev.buetow.org>  Sat, 21 Dec 2013 12:00:24 +0100
 
 pwgrep (0.8.8) stable; urgency=low
 
   * Another initial package for Debian Wheezy (2nd try)
 
- -- Paul Buetow <paul@buetow.org>  Mon, 01 Jul 2013 12:00:10 +0200
+ -- Paul Buetow <pwgrep@dev.buetow.org>  Mon, 01 Jul 2013 12:00:10 +0200
 
 pwgrep (0.8.7) stable; urgency=low
 
   * Initial package for Debian Wheezy, but no more changes.
 
- -- Paul Buetow <paul@buetow.org>  Mon, 01 Jul 2013 11:53:16 +0200
+ -- Paul Buetow <pwgrep@dev.buetow.org>  Mon, 01 Jul 2013 11:53:16 +0200
 
 pwgrep (0.8.6) stable; urgency=low
 
   * Makefile sets version in pwgrep.sh
 
- -- Paul Buetow <paul@buetow.org>  Mon, 08 Apr 2013 21:34:45 +0200
+ -- Paul Buetow <pwgrep@dev.buetow.org>  Mon, 08 Apr 2013 21:34:45 +0200
 
 pwgrep (0.8.5) stable; urgency=low
 
   * Fixing the Makefile again. Arrghh...
 
- -- Paul Buetow <paul@buetow.org>  Mon, 08 Apr 2013 21:26:08 +0200
+ -- Paul Buetow <pwgrep@dev.buetow.org>  Mon, 08 Apr 2013 21:26:08 +0200
 
 pwgrep (0.8.4) stable; urgency=low
 
@@ -62,7 +62,7 @@ pwgrep (0.8.4) stable; urgency=low
 
   * Every command has its manpage now.
 
- -- Paul Buetow <paul@buetow.org>  Mon, 08 Apr 2013 20:55:45 +0200
+ -- Paul Buetow <pwgrep@dev.buetow.org>  Mon, 08 Apr 2013 20:55:45 +0200
 
 pwgrep (0.8.3) stable; urgency=low
 
@@ -161,4 +161,4 @@ pwgrep (0.8.3) stable; urgency=low
   atm).  e.g. "pwgrep -o pwgrepbar"
 
 
- -- Paul Buetow <paul@buetow.org>  Fri, 04 Jan 2013 07:53:32 +0100
+ -- Paul Buetow <pwgrep@dev.buetow.org>  Fri, 04 Jan 2013 07:53:32 +0100

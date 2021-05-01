@@ -22,4 +22,4 @@ Where OPTS are:
 
 =head1 Tutorial
 
-Please go to L<http://pwgrep.buetow.org>.
+Please go to L<http://buetow.org>.
